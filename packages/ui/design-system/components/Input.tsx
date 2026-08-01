@@ -134,29 +134,42 @@ export function SliderField({
   );
 }
 
-/** Campo de atalho (hotkey) somente leitura com aparência de tecla. */
+/** Campo de atalho (hotkey) com estado de captura de combinação. */
 export function HotkeyInput({
   value,
   onCapture,
+  onKeyDown,
+  capturing,
   invalid,
+  className,
 }: {
   value: string;
-  onCapture?: () => void | undefined;
+  onCapture?: (() => void) | undefined;
+  onKeyDown?: ((event: React.KeyboardEvent<HTMLButtonElement>) => void) | undefined;
+  capturing?: boolean | undefined;
   invalid?: boolean | undefined;
+  className?: string | undefined;
 }) {
   return (
     <button
       type="button"
       onClick={onCapture}
+      onKeyDown={onKeyDown}
       className={cn(
-        "w-full rounded-lg border bg-surface-primary/60 px-3 py-2 text-left font-mono text-sm text-ink transition-colors",
-        invalid ? "border-accent-red text-accent-red" : "border-border-primary hover:border-border-glow",
+        "min-w-32 rounded-lg border px-3 py-2 text-center font-mono text-sm transition-colors",
+        capturing
+          ? "border-border-glow bg-accent-purple/15 text-ink shadow-glow-purple"
+          : invalid
+            ? "border-accent-red bg-surface-primary/60 text-accent-red"
+            : "border-border-primary bg-surface-primary/60 text-ink hover:border-border-glow",
+        className,
       )}
     >
-      {value}
+      {capturing ? "Pressione…" : value}
     </button>
   );
 }
+
 
 export { Label, Switch, Slider };
 
