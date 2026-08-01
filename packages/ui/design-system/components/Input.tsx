@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Input as BaseInput } from "@/components/ui/input";
+import { Button as DSButton } from "./Button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
@@ -158,3 +159,41 @@ export function HotkeyInput({
 }
 
 export { Label, Switch, Slider };
+
+/** Grupo segmentado de opções (pills) — substitui seletores ad-hoc. */
+export function Segmented<T extends string | number>({
+  label,
+  value,
+  options,
+  onChange,
+  hint,
+}: {
+  label?: string | undefined;
+  value: T;
+  options: ReadonlyArray<{ value: T; label: string }>;
+  onChange: (value: T) => void;
+  hint?: string | undefined;
+}) {
+  const pills = (
+    <div className="flex flex-wrap gap-2">
+      {options.map((option) => (
+        <DSButton
+          key={String(option.value)}
+          size="sm"
+          className="rounded-full"
+          variant={option.value === value ? "primary" : "secondary"}
+          onClick={() => onChange(option.value)}
+        >
+          {option.label}
+        </DSButton>
+      ))}
+    </div>
+  );
+
+  if (!label) return pills;
+  return (
+    <Field label={label} {...(hint ? { hint } : {})}>
+      {pills}
+    </Field>
+  );
+}
