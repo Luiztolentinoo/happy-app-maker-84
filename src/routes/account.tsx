@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ShieldCheck, UserRound } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, StatusChip } from "@/components/Module";
+import { Module, Badge } from "@ds";
 import { useSettings } from "@/hooks/use-settings";
 import { APP_NAME, isNativeMode } from "@/lib/clipcore";
 
@@ -32,9 +32,9 @@ function AccountPage() {
       title="Conta"
       subtitle="Perfil local — nenhuma conta na nuvem é necessária"
       actions={
-        <StatusChip tone={isNativeMode() ? "success" : "warning"}>
+        <Badge tone={isNativeMode() ? "green" : "yellow"}>
           {isNativeMode() ? "desktop" : "prévia web"}
-        </StatusChip>
+        </Badge>
       }
     >
       <div className="grid gap-6 lg:grid-cols-2">

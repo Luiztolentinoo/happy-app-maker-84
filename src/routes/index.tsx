@@ -14,7 +14,7 @@ import {
   Timer,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, Gauge, StatusChip } from "@/components/Module";
+import { Module, Gauge, Badge } from "@ds";
 import { CoreOrb, orbToneFor } from "@/components/CoreOrb";
 import { SaveClipButton } from "@/components/SaveClipButton";
 import { Onboarding } from "@/components/Onboarding";
@@ -107,9 +107,9 @@ function Dashboard() {
         title="Centro de comando"
         subtitle={`${APP_NAME} — motor de captura, hardware e clipes recentes`}
         actions={
-          <StatusChip tone={state === "error" ? "destructive" : "success"}>
+          <Badge tone={state === "error" ? "red" : "green"}>
             {STATE_LABEL[state]}
-          </StatusChip>
+          </Badge>
         }
       >
         <div className="grid gap-6 xl:grid-cols-3">
@@ -156,9 +156,9 @@ function Dashboard() {
 
           <Module icon={MonitorPlay} title="Telemetria de hardware">
             <div className="grid gap-3">
-              <Gauge label="GPU · NVENC" value="42%" percent={42} tone="primary" />
-              <Gauge label="CPU" value="18%" percent={18} tone="electric" />
-              <Gauge label="RAM" value="9,4 GB" percent={58} tone="success" />
+              <Gauge label="GPU · NVENC" value="42%" percent={42} tone="purple" />
+              <Gauge label="CPU" value="18%" percent={18} tone="blue" />
+              <Gauge label="RAM" value="9,4 GB" percent={58} tone="green" />
             </div>
           </Module>
 

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { CheckCircle2, CircleAlert, Cpu, RefreshCw, XCircle } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, Gauge, StatusChip } from "@/components/Module";
+import { Module, Gauge, Badge } from "@ds";
 import { Button } from "@/components/ui/button";
 import { type DiagnosticResult, runDemoDiagnostics } from "@/lib/clipcore";
 
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/diagnostics")({
 });
 
 const ICONS = { pass: CheckCircle2, warn: CircleAlert, fail: XCircle } as const;
-const TONES = { pass: "success", warn: "warning", fail: "destructive" } as const;
+const TONES = { pass: "green", warn: "yellow", fail: "red" } as const;
 const STATUS_TEXT = { pass: "online", warn: "check", fail: "offline" } as const;
 const ICON_COLOR = {
   pass: "text-success",
@@ -35,12 +35,12 @@ const ICON_COLOR = {
 } as const;
 
 const HARDWARE = [
-  { label: "GPU · NVENC", value: "ONLINE", percent: 88, tone: "primary" as const },
-  { label: "CPU", value: "18%", percent: 18, tone: "electric" as const },
-  { label: "Storage", value: "GOOD", percent: 72, tone: "success" as const },
-  { label: "Encoder", value: "READY", percent: 95, tone: "primary" as const },
-  { label: "Áudio", value: "READY", percent: 64, tone: "success" as const },
-  { label: "Rede", value: "STABLE", percent: 80, tone: "electric" as const },
+  { label: "GPU · NVENC", value: "ONLINE", percent: 88, tone: "purple" as const },
+  { label: "CPU", value: "18%", percent: 18, tone: "blue" as const },
+  { label: "Storage", value: "GOOD", percent: 72, tone: "green" as const },
+  { label: "Encoder", value: "READY", percent: 95, tone: "purple" as const },
+  { label: "Áudio", value: "READY", percent: 64, tone: "green" as const },
+  { label: "Rede", value: "STABLE", percent: 80, tone: "blue" as const },
 ];
 
 function DiagnosticsPage() {
@@ -89,7 +89,7 @@ function DiagnosticsPage() {
                     <p className="text-xs text-muted-foreground">{r.detail}</p>
                     {r.fix ? <p className="mt-1 text-xs text-primary">Solução: {r.fix}</p> : null}
                   </div>
-                  <StatusChip tone={TONES[r.status]}>{STATUS_TEXT[r.status]}</StatusChip>
+                  <Badge tone={TONES[r.status]}>{STATUS_TEXT[r.status]}</Badge>
                 </li>
               );
             })}

@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Download, Scissors } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, StatusChip } from "@/components/Module";
+import { Module, Badge } from "@ds";
 import { Button } from "@/components/ui/button";
 import { useClips } from "@/hooks/use-clips";
 import { formatDuration } from "@/lib/clipcore";
@@ -38,7 +38,7 @@ function EditorPage() {
     <AppShell
       title="Editor"
       subtitle="Recortes não destrutivos — o arquivo original nunca é alterado"
-      actions={<StatusChip tone="primary">timeline</StatusChip>}
+      actions={<Badge tone="purple">timeline</Badge>}
     >
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <Module icon={Scissors} title="Timeline">
