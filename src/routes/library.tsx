@@ -168,22 +168,21 @@ function LibraryPage() {
           {!ready ? (
             <div className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
               {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-56 animate-pulse rounded-xl bg-muted/60" />
+                <SkeletonMedia key={i} />
               ))}
             </div>
           ) : visible.length === 0 ? (
             <Module>
-              <div className="flex flex-col items-center gap-3 py-10 text-center">
-                <Film className="size-8 text-muted-foreground" />
-                <p className="font-display text-lg font-semibold">Nenhum clipe encontrado</p>
-                <p className="max-w-sm text-sm text-muted-foreground">
-                  Ajuste os filtros, salve um clipe no centro de comando ou restaure os dados de
-                  demonstração.
-                </p>
-                <Button variant="outline" size="sm" onClick={resetDemo}>
-                  <RotateCcw /> Restaurar demonstração
-                </Button>
-              </div>
+              <EmptyState
+                icon={Film}
+                title="Nenhum clipe encontrado"
+                description="Ajuste os filtros, salve um clipe no centro de comando ou restaure os dados de demonstração."
+                action={
+                  <DSButton variant="secondary" size="sm" icon={RotateCcw} onClick={resetDemo}>
+                    Restaurar demonstração
+                  </DSButton>
+                }
+              />
             </Module>
           ) : (
             groups.map(([group, items]) => (
@@ -193,102 +192,90 @@ function LibraryPage() {
                 </h2>
                 <ul className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
                   {items.map((clip) => (
-                    <li
-                      key={clip.id}
-                      className="module group animate-rise overflow-hidden p-0"
-                    >
-                      <div
-                        className="relative aspect-video"
-                        style={{
-                          background: `linear-gradient(140deg, ${clip.accent} 0%, oklch(0.19 0.022 264) 88%)`,
-                        }}
-                      >
-                        <div className="absolute inset-x-3 top-3 flex items-center justify-between text-[11px]">
-                          <span className="rounded-full bg-background/70 px-2 py-0.5 backdrop-blur-sm">
-                            {clip.durationMs > 0 ? formatDuration(clip.durationMs) : "imagem"}
-                          </span>
-                          <span className="rounded-full bg-background/70 px-2 py-0.5 backdrop-blur-sm">
-                            {clip.height}p{clip.fps}
-                          </span>
-                        </div>
-                        <div className="absolute inset-0 flex items-center justify-center gap-2 bg-background/70 opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 focus-within:opacity-100">
-                          <Button
-                            size="icon"
-                            aria-label={`Reproduzir ${clip.title}`}
-                            className="min-h-11 min-w-11 rounded-full"
-                            onClick={() => setSelected(clip)}
-                          >
-                            <Play />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            aria-label={`Editar ${clip.title}`}
-                            className="min-h-11 min-w-11 rounded-full"
-                            onClick={() => {
-                              const next = window.prompt("Novo título", clip.title);
-                              if (next && next.trim()) rename(clip.id, next.trim());
+                    <li key={clip.id}>
+                      <MediaCard
+                        title={clip.title}
+                        meta={`${clip.game} · ${formatDateTime(clip.capturedAt)} · ${formatBytes(clip.fileSize)}`}
+                        duration={clip.durationMs > 0 ? formatDuration(clip.durationMs) : "imagem"}
+                        onClick={() => setSelected(clip)}
+                        thumbnail={
+                          <div
+                            className="absolute inset-0"
+                            style={{
+                              background: `linear-gradient(140deg, ${clip.accent} 0%, var(--background) 88%)`,
                             }}
                           >
-                            <Scissors />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            aria-label={`Exportar ${clip.title}`}
-                            className="min-h-11 min-w-11 rounded-full"
-                            onClick={() => setSelected(clip)}
-                          >
-                            <Upload />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            aria-label={`Favoritar ${clip.title}`}
-                            className="min-h-11 min-w-11 rounded-full"
-                            onClick={() => toggleFavorite(clip.id)}
-                          >
-                            <Heart
-                              className={clip.favorite ? "fill-destructive text-destructive" : ""}
+                            <span className="absolute top-3 left-3 rounded-full bg-background/70 px-2 py-0.5 text-[11px] backdrop-blur-sm">
+                              {clip.height}p{clip.fps}
+                            </span>
+                          </div>
+                        }
+                        overlay={
+                          <>
+                            <DSButton
+                              variant="primary"
+                              size="iconMd"
+                              icon={Play}
+                              iconSize="sm"
+                              aria-label={`Reproduzir ${clip.title}`}
+                              onClick={() => setSelected(clip)}
                             />
-                          </Button>
-                          <Button
-                            size="icon"
-                            variant="outline"
-                            aria-label={`Mais ações para ${clip.title}`}
-                            className="min-h-11 min-w-11 rounded-full"
-                            onClick={() => {
-                              remove(clip.id);
-                              if (selected?.id === clip.id) setSelected(null);
-                            }}
-                          >
-                            <MoreHorizontal />
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 p-4">
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold">{clip.title}</p>
-                          <p className="truncate text-xs text-muted-foreground">
-                            {clip.game} · {formatDateTime(clip.capturedAt)} ·{" "}
-                            {formatBytes(clip.fileSize)}
-                          </p>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-1.5">
-                          {clip.favorite ? (
-                            <Heart className="size-3.5 fill-destructive text-destructive" />
-                          ) : null}
-                          {clip.uploadStatus === "uploaded" ? (
-                            <Upload className="size-3.5 text-success" aria-label="Enviado" />
-                          ) : null}
-                        </div>
-                      </div>
+                            <DSButton
+                              variant="glass"
+                              size="iconMd"
+                              icon={Scissors}
+                              iconSize="sm"
+                              aria-label={`Editar ${clip.title}`}
+                              onClick={() => {
+                                const next = window.prompt("Novo título", clip.title);
+                                if (next && next.trim()) rename(clip.id, next.trim());
+                              }}
+                            />
+                            <DSButton
+                              variant="glass"
+                              size="iconMd"
+                              icon={Upload}
+                              iconSize="sm"
+                              aria-label={`Exportar ${clip.title}`}
+                              onClick={() => setSelected(clip)}
+                            />
+                            <DSButton
+                              variant="glass"
+                              size="iconMd"
+                              icon={Heart}
+                              iconSize="sm"
+                              aria-label={`Favoritar ${clip.title}`}
+                              onClick={() => toggleFavorite(clip.id)}
+                            />
+                            <DSButton
+                              variant="danger"
+                              size="iconMd"
+                              icon={Trash2}
+                              iconSize="sm"
+                              aria-label={`Excluir ${clip.title}`}
+                              onClick={() => {
+                                remove(clip.id);
+                                if (selected?.id === clip.id) setSelected(null);
+                              }}
+                            />
+                          </>
+                        }
+                        footer={
+                          <div className="flex items-center gap-2">
+                            {clip.favorite ? <Chip tone="red">favorito</Chip> : null}
+                            {clip.uploadStatus === "uploaded" ? (
+                              <Chip tone="green">enviado</Chip>
+                            ) : null}
+                          </div>
+                        }
+                      />
                     </li>
                   ))}
                 </ul>
               </section>
             ))
           )}
+
 
           {trash.length > 0 ? (
             <Module icon={Trash2} title="Lixeira">
