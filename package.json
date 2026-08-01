@@ -9,7 +9,16 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "desktop:dev": "tauri dev --config apps/desktop/src-tauri/tauri.conf.json",
+    "desktop:build": "tauri build --config apps/desktop/src-tauri/tauri.conf.json",
+    "desktop:check": "tauri info",
+    "rust:check": "cargo check --manifest-path apps/desktop/src-tauri/Cargo.toml",
+    "rust:test": "cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml",
+    "rust:fmt": "cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml -- --check",
+    "rust:clippy": "cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml -- -D warnings",
+    "typecheck": "tsgo --noEmit || tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -85,5 +94,9 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.1.5"
-  }
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
