@@ -2,16 +2,22 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Activity,
+  Cpu,
+  Gamepad2,
   HardDrive,
   Keyboard,
+  MemoryStick,
   Mic,
   MicOff,
+  MonitorPlay,
   Play,
-  Save,
   Timer,
-  Cpu,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { Module, Gauge, StatusChip } from "@/components/Module";
+import { CoreOrb, orbToneFor } from "@/components/CoreOrb";
+import { SaveClipButton } from "@/components/SaveClipButton";
+import { Onboarding } from "@/components/Onboarding";
 import { Button } from "@/components/ui/button";
 import { useClips } from "@/hooks/use-clips";
 import { useSettings } from "@/hooks/use-settings";
@@ -26,13 +32,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ClipCore — Painel de captura de clipes de jogos" },
+      { title: "ClipCore — Centro de comando de captura de gameplay" },
       {
         name: "description",
         content:
-          "Painel do ClipCore: estado do buffer retroativo, jogo detectado, atalhos, espaço em disco e últimos clipes salvos.",
+          "Centro de comando do ClipCore: Core Orb com estado do motor, encoder, GPU, CPU, RAM, microfone, espaço livre e últimos clipes.",
       },
-      { property: "og:title", content: "ClipCore — Painel de captura de clipes" },
+      { property: "og:title", content: "ClipCore — Centro de comando de captura" },
       {
         property: "og:description",
         content: "Capture seus melhores momentos sem perder FPS, sem bagunça e sem depender da nuvem.",
@@ -57,10 +63,12 @@ function Dashboard() {
   const { clips, addSimulated } = useClips();
   const [state, setState] = useState<CaptureState>("buffering");
   const [savedAt, setSavedAt] = useState<string | null>(null);
+  const [burst, setBurst] = useState(0);
 
   const usedBytes = useMemo(() => clips.reduce((sum, c) => sum + c.fileSize, 0), [clips]);
   const capacity = settings.maxStorageGb * 1024 ** 3;
   const usedPercent = Math.min(100, (usedBytes / capacity) * 100);
+  const lowSpace = usedPercent > 85;
   const saveHotkey = settings.hotkeys.find((h) => h.id === "save_clip")?.combo ?? "F8";
 
   function simulateClip() {
@@ -82,116 +90,161 @@ function Dashboard() {
         favorite: false,
         uploadStatus: "local",
         tags: ["simulado"],
-        accent: "oklch(0.62 0.19 265)",
+        accent: "oklch(0.63 0.235 302)",
       });
       setState("buffering");
       setSavedAt(new Date().toLocaleTimeString("pt-BR"));
+      setBurst((b) => b + 1);
     }, 900);
   }
 
   const recent = clips.slice(0, 4);
 
   return (
-    <AppShell title="Início" subtitle={`${APP_NAME} — visão geral da captura`}>
-      <div className="grid gap-4 lg:grid-cols-3">
-        <section className="panel glow p-5 lg:col-span-2">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Activity className="size-4 text-primary" /> Estado do motor
-              </p>
-              <p className="mt-1 font-display text-3xl font-semibold">{STATE_LABEL[state]}</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Jogo detectado: <span className="text-foreground">Tactical Strike</span> · fonte:
-                monitor principal
-              </p>
+    <>
+      <Onboarding />
+      <AppShell
+        title="Centro de comando"
+        subtitle={`${APP_NAME} — motor de captura, hardware e clipes recentes`}
+        actions={
+          <StatusChip tone={state === "error" ? "destructive" : "success"}>
+            {STATE_LABEL[state]}
+          </StatusChip>
+        }
+      >
+        <div className="grid gap-6 xl:grid-cols-3">
+          <Module className="glow xl:col-span-2" icon={Activity} title="Motor de captura">
+            <div className="grid items-center gap-8 md:grid-cols-[auto_minmax(0,1fr)_auto]">
+              <CoreOrb tone={orbToneFor(state, lowSpace)} burstKey={burst} />
+              <div className="min-w-0">
+                <p className="font-display text-4xl leading-tight font-semibold">
+                  {STATE_LABEL[state]}
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Jogo detectado <span className="text-foreground">Tactical Strike</span> · fonte
+                  monitor principal
+                </p>
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <Metric icon={Timer} label="Buffer" value={`${settings.bufferSeconds}s`} />
+                  <Metric icon={Keyboard} label="Atalho" value={saveHotkey} />
+                  <Metric
+                    icon={Cpu}
+                    label="Encoder"
+                    value={settings.codec === "h264" ? "H.264 auto" : settings.codec.toUpperCase()}
+                  />
+                </div>
+                {savedAt ? (
+                  <p className="mt-5 animate-fade-in rounded-xl border border-success/30 bg-success/10 px-4 py-2.5 text-sm text-success">
+                    Clipe simulado salvo às {savedAt} e adicionado à biblioteca.
+                  </p>
+                ) : null}
+              </div>
+              <div className="flex flex-col items-center gap-4">
+                <SaveClipButton
+                  onClick={simulateClip}
+                  disabled={state === "saving_clip"}
+                  hotkey={saveHotkey}
+                />
+                <Button variant="outline" asChild>
+                  <Link to="/library">
+                    <Play /> Biblioteca
+                  </Link>
+                </Button>
+              </div>
             </div>
-            <div className="flex flex-col items-start gap-2">
-              <Button onClick={simulateClip} disabled={state === "saving_clip"}>
-                <Save /> Salvar clipe simulado ({saveHotkey})
-              </Button>
-              <Button variant="outline" asChild>
-                <Link to="/library">
-                  <Play /> Abrir biblioteca
-                </Link>
-              </Button>
+          </Module>
+
+          <Module icon={MonitorPlay} title="Telemetria de hardware">
+            <div className="grid gap-3">
+              <Gauge label="GPU · NVENC" value="42%" percent={42} tone="primary" />
+              <Gauge label="CPU" value="18%" percent={18} tone="electric" />
+              <Gauge label="RAM" value="9,4 GB" percent={58} tone="success" />
             </div>
-          </div>
-          {savedAt ? (
-            <p className="mt-4 rounded-md border border-success/30 bg-success/10 px-3 py-2 text-sm text-success">
-              Clipe simulado salvo às {savedAt} e adicionado à biblioteca.
-            </p>
-          ) : null}
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <Metric icon={Timer} label="Buffer retroativo" value={`${settings.bufferSeconds}s`} />
-            <Metric icon={Keyboard} label="Atalho principal" value={saveHotkey} />
-            <Metric
-              icon={Cpu}
-              label="Encoder"
-              value={settings.codec === "h264" ? "H.264 (auto)" : settings.codec.toUpperCase()}
-            />
-          </div>
-        </section>
+          </Module>
 
-        <section className="panel p-5">
-          <p className="flex items-center gap-2 text-sm text-muted-foreground">
-            <HardDrive className="size-4 text-primary" /> Armazenamento
-          </p>
-          <p className="mt-2 font-display text-2xl font-semibold">{formatBytes(usedBytes)}</p>
-          <p className="text-sm text-muted-foreground">de {settings.maxStorageGb} GB reservados</p>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-primary" style={{ width: `${usedPercent}%` }} />
-          </div>
-          <p className="mt-4 flex items-center gap-2 text-sm">
-            {settings.micEnabled ? (
-              <>
-                <Mic className="size-4 text-success" /> Microfone ativo
-              </>
-            ) : (
-              <>
-                <MicOff className="size-4 text-muted-foreground" /> Microfone desativado
-              </>
-            )}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">Pasta: {settings.folder}</p>
-        </section>
-
-        <section className="panel p-5 lg:col-span-3">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Últimos clipes</h2>
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/library">Ver tudo</Link>
-            </Button>
-          </div>
-          {recent.length === 0 ? (
+          <Module icon={HardDrive} title="Armazenamento">
+            <p className="font-display text-3xl font-semibold">{formatBytes(usedBytes)}</p>
             <p className="text-sm text-muted-foreground">
-              Nenhum clipe ainda. Use o botão acima para gerar um clipe simulado.
+              de {settings.maxStorageGb} GB reservados
             </p>
-          ) : (
-            <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              {recent.map((clip) => (
-                <li key={clip.id} className="overflow-hidden rounded-lg border border-border">
-                  <div
-                    className="flex h-24 items-end p-3 text-xs text-foreground/80"
-                    style={{
-                      background: `linear-gradient(140deg, ${clip.accent} 0%, oklch(0.2 0.02 265) 85%)`,
-                    }}
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-background/60">
+              <div
+                className="h-full rounded-full transition-[width] duration-500"
+                style={{
+                  width: `${usedPercent}%`,
+                  background: "linear-gradient(90deg, var(--primary), var(--electric))",
+                  boxShadow: "0 0 18px -2px var(--primary)",
+                }}
+              />
+            </div>
+            <p className="mt-5 flex items-center gap-2 text-sm">
+              {settings.micEnabled ? (
+                <>
+                  <Mic className="size-4 text-success" /> Microfone ativo
+                </>
+              ) : (
+                <>
+                  <MicOff className="size-4 text-muted-foreground" /> Microfone desativado
+                </>
+              )}
+            </p>
+            <p className="mt-1 truncate font-mono text-xs text-muted-foreground">
+              {settings.folder}
+            </p>
+          </Module>
+
+          <Module icon={Gamepad2} title="Jogo atual">
+            <p className="font-display text-2xl font-semibold">Tactical Strike</p>
+            <p className="mt-1 text-sm text-muted-foreground">Perfil automático · DX12 · 1440p</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <Metric icon={MemoryStick} label="Resolução" value={settings.resolution} />
+              <Metric icon={Timer} label="FPS alvo" value={`${settings.fps}`} />
+            </div>
+          </Module>
+
+          <Module
+            className="xl:col-span-1"
+            icon={Play}
+            title="Últimos clipes"
+            action={
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/library">Ver tudo</Link>
+              </Button>
+            }
+          >
+            {recent.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Nenhum clipe ainda. Use o botão Salvar para gerar um clipe simulado.
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {recent.map((clip) => (
+                  <li
+                    key={clip.id}
+                    className="flex items-center gap-3 rounded-xl border border-border bg-background/40 p-2.5 transition-colors hover:bg-elevated/60"
                   >
-                    {clip.durationMs > 0 ? formatDuration(clip.durationMs) : "imagem"}
-                  </div>
-                  <div className="p-3">
-                    <p className="truncate text-sm font-medium">{clip.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {clip.game} · {formatDateTime(clip.capturedAt)}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-    </AppShell>
+                    <span
+                      className="grid h-12 w-20 shrink-0 place-items-center rounded-lg text-[11px] text-foreground/80"
+                      style={{
+                        background: `linear-gradient(140deg, ${clip.accent} 0%, oklch(0.2 0.024 264) 88%)`,
+                      }}
+                    >
+                      {clip.durationMs > 0 ? formatDuration(clip.durationMs) : "img"}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block truncate text-sm font-medium">{clip.title}</span>
+                      <span className="block truncate text-xs text-muted-foreground">
+                        {clip.game} · {formatDateTime(clip.capturedAt)}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Module>
+        </div>
+      </AppShell>
+    </>
   );
 }
 
@@ -205,11 +258,11 @@ function Metric({
   value: string;
 }) {
   return (
-    <div className="rounded-lg border border-border bg-background/40 p-3">
-      <p className="flex items-center gap-2 text-xs text-muted-foreground">
-        <Icon className="size-3.5" /> {label}
+    <div className="rounded-xl border border-border bg-background/40 p-3.5">
+      <p className="label-caps flex items-center gap-2">
+        <Icon className="size-3.5 text-primary" /> {label}
       </p>
-      <p className="mt-1 font-display text-lg font-semibold">{value}</p>
+      <p className="mt-1.5 font-display text-lg font-semibold">{value}</p>
     </div>
   );
 }
