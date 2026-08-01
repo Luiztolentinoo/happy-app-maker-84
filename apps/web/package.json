@@ -1,0 +1,11 @@
+{
+  "name": "@clipcore/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Marketing/preview web surface. Shares UI with the desktop app; capture features are simulated here.",
+  "scripts": {
+    "dev": "cd ../.. && bun run dev",
+    "build": "cd ../.. && bun run build"
+  }
+}

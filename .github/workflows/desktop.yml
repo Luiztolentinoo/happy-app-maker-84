@@ -1,0 +1,68 @@
+name: desktop
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  web:
+    name: lint / typecheck / test / build web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run test
+      - run: bun run build
+
+  rust:
+    name: cargo fmt / clippy / test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - run: cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml -- --check
+      - run: cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml -- -D warnings
+      - run: cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml
+
+  installer:
+    name: build Windows installer
+    needs: [web, rust]
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - run: bun install --frozen-lockfile
+      - name: Fetch authorized FFmpeg sidecar
+        env:
+          FFMPEG_URL: ${{ vars.FFMPEG_URL }}
+        run: pwsh scripts/fetch-ffmpeg.ps1
+      - run: bun run desktop:build
+      - name: Checksums
+        shell: pwsh
+        run: |
+          Get-ChildItem -Recurse apps/desktop/src-tauri/target/release/bundle -Include *.exe,*.msi |
+            ForEach-Object { (Get-FileHash $_.FullName -Algorithm SHA256).Hash + "  " + $_.Name } |
+            Set-Content SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clipcore-windows-installer
+          path: |
+            apps/desktop/src-tauri/target/release/bundle/**/*.exe
+            apps/desktop/src-tauri/target/release/bundle/**/*.msi
+            SHA256SUMS.txt
+      # Production releases are only published from a signed build:
+      # set TAURI_SIGNING_PRIVATE_KEY + a Windows code-signing certificate first.

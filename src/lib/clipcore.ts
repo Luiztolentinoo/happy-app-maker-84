@@ -1,5 +1,14 @@
+import { isDemoRuntime, isDesktopRuntime } from "@/services/nativeClient";
+
 export const APP_NAME = "ClipCore";
-export const DEMO_MODE = true;
+
+/**
+ * Environment detection replaces the old fixed DEMO_MODE constant: data is only
+ * simulated when the app is NOT running inside the Tauri desktop shell.
+ */
+export const isDemoMode = isDemoRuntime;
+export const isNativeMode = isDesktopRuntime;
+
 
 export type CaptureState =
   | "idle"
