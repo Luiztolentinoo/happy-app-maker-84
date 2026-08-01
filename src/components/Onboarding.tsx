@@ -55,7 +55,7 @@ export function Onboarding() {
             "radial-gradient(60rem 40rem at 70% -10%, oklch(0.63 0.235 302 / 22%), transparent 70%), radial-gradient(50rem 34rem at 0% 100%, oklch(0.75 0.14 232 / 16%), transparent 72%)",
         }}
       />
-      <div className="panel relative w-full max-w-xl animate-rise p-10 text-center">
+      <div className="glass-floating relative w-full max-w-xl animate-ds-slide p-10 text-center">
         <p className="label-caps">{APP_NAME}</p>
         <h2 className="mt-4 font-display text-3xl leading-tight font-semibold text-glow">
           Bem-vindo ao futuro da captura de gameplay.
@@ -70,15 +70,15 @@ export function Onboarding() {
             return (
               <li
                 key={label}
-                className="flex items-center gap-3 rounded-xl border border-border bg-background/40 px-4 py-3 text-sm"
+                className="flex items-center gap-3 rounded-xl border border-border-primary bg-background/40 px-4 py-3 text-sm"
                 style={{ opacity: state === "idle" ? 0.5 : 1 }}
               >
-                <Icon className="size-4 shrink-0 text-primary" />
+                <Icon className="size-4 shrink-0 text-accent-purple" />
                 <span className="min-w-0 flex-1 truncate">{label}</span>
                 {state === "done" ? (
-                  <Check className="size-4 text-success" />
+                  <Check className="size-4 text-accent-green" />
                 ) : state === "running" ? (
-                  <Loader2 className="size-4 animate-spin text-electric" />
+                  <Loader2 className="size-4 animate-spin text-accent-blue" />
                 ) : null}
               </li>
             );
