@@ -1,0 +1,185 @@
+/*
+ * ClipCore Design System — tokens oficiais
+ * Fonte única de verdade para cores, sombras, glass e animações.
+ * Nenhum componente deve declarar cor literal: use apenas estes tokens.
+ */
+
+@theme inline {
+  /* superfícies */
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-glass: var(--surface-glass);
+
+  /* texto */
+  --color-ink: var(--text-primary);
+  --color-ink-secondary: var(--text-secondary);
+  --color-ink-muted: var(--text-muted);
+
+  /* bordas */
+  --color-border-primary: var(--border-primary);
+  --color-border-glow: var(--border-glow);
+
+  /* acentos semânticos */
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-green: var(--accent-green);
+  --color-accent-red: var(--accent-red);
+  --color-accent-yellow: var(--accent-yellow);
+
+  /* animações centrais */
+  --animate-ds-fade: ds-fade 0.28s ease-out both;
+  --animate-ds-slide: ds-slide 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-ds-scale: ds-scale 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-ds-pulse: ds-pulse 2s ease-in-out infinite;
+  --animate-ds-glow: ds-glow 2.6s ease-in-out infinite;
+  --animate-ds-orb-pulse: orb-pulse 3.2s ease-in-out infinite;
+  --animate-ds-orb-explosion: orb-burst 0.75s ease-out;
+  --animate-ds-ripple: ds-ripple 0.6s ease-out;
+  --animate-ds-notification: ds-notification 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-ds-panel-expand: ds-panel-expand 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+:root {
+  /* superfícies */
+  --surface-primary: oklch(0.208 0.024 264);
+  --surface-secondary: oklch(0.248 0.028 264);
+  --surface-glass: oklch(0.26 0.03 264 / 62%);
+
+  /* texto */
+  --text-primary: oklch(0.93 0.012 250);
+  --text-secondary: oklch(0.8 0.018 254);
+  --text-muted: oklch(0.68 0.024 258);
+
+  /* bordas */
+  --border-primary: oklch(0.32 0.03 264 / 70%);
+  --border-glow: oklch(0.63 0.235 302 / 45%);
+
+  /* acentos */
+  --accent-purple: oklch(0.63 0.235 302);
+  --accent-blue: oklch(0.75 0.14 232);
+  --accent-green: oklch(0.79 0.19 160);
+  --accent-red: oklch(0.62 0.235 24);
+  --accent-yellow: oklch(0.86 0.13 92);
+
+  /* espaçamento semântico (grid de 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* sombras */
+  --shadow-xs: 0 1px 2px oklch(0.08 0.02 265 / 60%);
+  --shadow-sm: 0 4px 12px -4px oklch(0.08 0.02 265 / 70%);
+  --shadow-md: 0 14px 34px -16px oklch(0.08 0.02 265 / 80%);
+  --shadow-lg: 0 28px 70px -30px oklch(0.08 0.02 265 / 90%);
+  --glow-purple: 0 0 0 1px oklch(0.63 0.235 302 / 30%), 0 20px 50px -24px oklch(0.63 0.235 302 / 70%);
+  --glow-blue: 0 0 0 1px oklch(0.75 0.14 232 / 30%), 0 20px 50px -24px oklch(0.75 0.14 232 / 65%);
+  --glow-green: 0 0 0 1px oklch(0.79 0.19 160 / 30%), 0 20px 50px -24px oklch(0.79 0.19 160 / 65%);
+  --glow-red: 0 0 0 1px oklch(0.62 0.235 24 / 32%), 0 20px 50px -24px oklch(0.62 0.235 24 / 65%);
+}
+
+/* ---------- sombras ---------- */
+@utility shadow-ds-xs {
+  box-shadow: var(--shadow-xs);
+}
+@utility shadow-ds-sm {
+  box-shadow: var(--shadow-sm);
+}
+@utility shadow-ds-md {
+  box-shadow: var(--shadow-md);
+}
+@utility shadow-ds-lg {
+  box-shadow: var(--shadow-lg);
+}
+@utility glow-purple {
+  box-shadow: var(--glow-purple);
+}
+@utility glow-blue {
+  box-shadow: var(--glow-blue);
+}
+@utility glow-green {
+  box-shadow: var(--glow-green);
+}
+@utility glow-red {
+  box-shadow: var(--glow-red);
+}
+
+/* ---------- glassmorphism ---------- */
+@utility glass-1 {
+  background: linear-gradient(160deg, oklch(0.26 0.03 264 / 55%), oklch(0.2 0.024 264 / 68%));
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(12px) saturate(120%);
+  box-shadow: var(--shadow-sm);
+}
+@utility glass-2 {
+  background: linear-gradient(160deg, oklch(0.27 0.032 264 / 70%), oklch(0.2 0.024 264 / 82%));
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(18px) saturate(130%);
+  box-shadow: var(--shadow-md);
+}
+@utility glass-strong {
+  background: linear-gradient(160deg, oklch(0.3 0.035 264 / 86%), oklch(0.22 0.026 264 / 94%));
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(26px) saturate(140%);
+  box-shadow: var(--shadow-lg);
+}
+@utility glass-floating {
+  background: linear-gradient(160deg, oklch(0.3 0.035 264 / 78%), oklch(0.22 0.026 264 / 88%));
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-2xl);
+  backdrop-filter: blur(30px) saturate(150%);
+  box-shadow: var(--shadow-lg), var(--glow-purple);
+}
+
+/* ---------- animações centrais ---------- */
+@keyframes ds-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ds-slide {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes ds-scale {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes ds-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+@keyframes ds-glow {
+  0%, 100% { box-shadow: var(--shadow-sm); }
+  50% { box-shadow: var(--glow-purple); }
+}
+@keyframes ds-ripple {
+  from { transform: scale(0.4); opacity: 0.55; }
+  to { transform: scale(2.2); opacity: 0; }
+}
+@keyframes ds-notification {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes ds-panel-expand {
+  from { transform: scaleY(0.92); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+/* ---------- superfícies compostas ---------- */
+@utility ds-hover-lift {
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-lg), var(--glow-purple);
+  }
+}
