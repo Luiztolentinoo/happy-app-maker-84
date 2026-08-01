@@ -15,7 +15,7 @@ import { Module, StatusChip } from "@/components/Module";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSettings } from "@/hooks/use-settings";
+import { type ClipcoreSettings, useSettings } from "@/hooks/use-settings";
 import { BUFFER_OPTIONS, estimateSizePerMinute, formatBytes, hotkeyIssues } from "@/lib/clipcore";
 
 export const Route = createFileRoute("/settings")({
@@ -67,7 +67,7 @@ function SettingsPage() {
     );
   }, [query]);
 
-  function touch<K extends Parameters<typeof update>[0]>(key: K, value: Parameters<typeof update>[1]) {
+  function touch<K extends keyof ClipcoreSettings>(key: K, value: ClipcoreSettings[K]) {
     update(key, value);
     setDirty(true);
   }

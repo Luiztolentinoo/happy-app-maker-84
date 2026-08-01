@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DiagnosticsRouteImport } from './routes/diagnostics'
+import { Route as EditorRouteImport } from './routes/editor'
 import { Route as LibraryRouteImport } from './routes/library'
+import { Route as RecordingsRouteImport } from './routes/recordings'
 import { Route as SettingsRouteImport } from './routes/settings'
 
 const IndexRoute = IndexRouteImport.update({
@@ -24,9 +26,19 @@ const DiagnosticsRoute = DiagnosticsRouteImport.update({
   path: '/diagnostics',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EditorRoute = EditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LibraryRoute = LibraryRouteImport.update({
   id: '/library',
   path: '/library',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecordingsRoute = RecordingsRouteImport.update({
+  id: '/recordings',
+  path: '/recordings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -38,34 +50,51 @@ const SettingsRoute = SettingsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/diagnostics': typeof DiagnosticsRoute
+  '/editor': typeof EditorRoute
   '/library': typeof LibraryRoute
+  '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/diagnostics': typeof DiagnosticsRoute
+  '/editor': typeof EditorRoute
   '/library': typeof LibraryRoute
+  '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/diagnostics': typeof DiagnosticsRoute
+  '/editor': typeof EditorRoute
   '/library': typeof LibraryRoute
+  '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/diagnostics' | '/library' | '/settings'
+  fullPaths:
+    '/' | '/diagnostics' | '/editor' | '/library' | '/recordings' | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/diagnostics' | '/library' | '/settings'
-  id: '__root__' | '/' | '/diagnostics' | '/library' | '/settings'
+  to:
+    '/' | '/diagnostics' | '/editor' | '/library' | '/recordings' | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/diagnostics'
+    | '/editor'
+    | '/library'
+    | '/recordings'
+    | '/settings'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DiagnosticsRoute: typeof DiagnosticsRoute
+  EditorRoute: typeof EditorRoute
   LibraryRoute: typeof LibraryRoute
+  RecordingsRoute: typeof RecordingsRoute
   SettingsRoute: typeof SettingsRoute
 }
 
@@ -85,11 +114,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiagnosticsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/editor': {
+      id: '/editor'
+      path: '/editor'
+      fullPath: '/editor'
+      preLoaderRoute: typeof EditorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/library': {
       id: '/library'
       path: '/library'
       fullPath: '/library'
       preLoaderRoute: typeof LibraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recordings': {
+      id: '/recordings'
+      path: '/recordings'
+      fullPath: '/recordings'
+      preLoaderRoute: typeof RecordingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -105,7 +148,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DiagnosticsRoute: DiagnosticsRoute,
+  EditorRoute: EditorRoute,
   LibraryRoute: LibraryRoute,
+  RecordingsRoute: RecordingsRoute,
   SettingsRoute: SettingsRoute,
 }
 export const routeTree = rootRouteImport
