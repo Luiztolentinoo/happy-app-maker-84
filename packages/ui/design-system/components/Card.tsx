@@ -15,10 +15,10 @@ export function GlassCard({
   hover = true,
   onClick,
 }: {
-  className?: string;
+  className?: string | undefined;
   children: ReactNode;
-  hover?: boolean;
-  onClick?: () => void;
+  hover?: boolean | undefined;
+  onClick?: () => void | undefined;
 }) {
   const Wrapper = onClick ? "button" : "div";
   return (
@@ -44,12 +44,12 @@ export function MetricCard({
   tone = "purple",
   className,
 }: {
-  icon?: LucideIcon;
+  icon?: LucideIcon | undefined;
   label: string;
   value: string;
-  hint?: string;
-  tone?: Tone;
-  className?: string;
+  hint?: string | undefined;
+  tone?: Tone | undefined;
+  className?: string | undefined;
 }) {
   return (
     <GlassCard className={className}>
@@ -73,9 +73,9 @@ export function StatusCard({
 }: {
   title: string;
   status: StatusKind;
-  description?: string;
-  action?: ReactNode;
-  className?: string;
+  description?: string | undefined;
+  action?: ReactNode | undefined;
+  className?: string | undefined;
 }) {
   return (
     <GlassCard className={className}>
@@ -98,12 +98,12 @@ export function HardwareCard({
   tone = "blue",
   className,
 }: {
-  icon?: LucideIcon;
+  icon?: LucideIcon | undefined;
   label: string;
   value: string;
   percent: number;
-  tone?: Tone;
-  className?: string;
+  tone?: Tone | undefined;
+  className?: string | undefined;
 }) {
   return (
     <GlassCard className={className} hover={false}>
@@ -131,13 +131,13 @@ export function MediaCard({
   className,
 }: {
   title: string;
-  meta?: string;
-  thumbnail?: ReactNode;
-  duration?: string;
-  overlay?: ReactNode;
-  footer?: ReactNode;
-  onClick?: () => void;
-  className?: string;
+  meta?: string | undefined;
+  thumbnail?: ReactNode | undefined;
+  duration?: string | undefined;
+  overlay?: ReactNode | undefined;
+  footer?: ReactNode | undefined;
+  onClick?: () => void | undefined;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("glass-2 group relative overflow-hidden", animations.cardHover, className)}>
@@ -183,11 +183,11 @@ export function GameCard({
   className,
 }: {
   name: string;
-  detail?: string;
-  icon?: LucideIcon;
-  active?: boolean;
-  action?: ReactNode;
-  className?: string;
+  detail?: string | undefined;
+  icon?: LucideIcon | undefined;
+  active?: boolean | undefined;
+  action?: ReactNode | undefined;
+  className?: string | undefined;
 }) {
   return (
     <GlassCard className={cn(active && "border-border-glow glow-purple", className)}>
@@ -214,8 +214,8 @@ export function DiagnosticCard({
 }: {
   label: string;
   status: StatusKind;
-  detail?: string;
-  className?: string;
+  detail?: string | undefined;
+  className?: string | undefined;
 }) {
   const tone: Tone = status === "error" ? "red" : status === "warning" ? "yellow" : "green";
   return (

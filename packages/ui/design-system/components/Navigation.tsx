@@ -9,7 +9,7 @@ export type NavItem = {
   to: string;
   label: string;
   icon: LucideIcon;
-  hint?: string;
+  hint?: string | undefined;
 };
 
 /** Sidebar oficial: ícones grandes, tooltip e indicador luminoso de rota ativa. */
@@ -21,10 +21,10 @@ export function Sidebar({
   className,
 }: {
   items: NavItem[];
-  brand?: ReactNode;
-  footer?: ReactNode;
-  collapsed?: boolean;
-  className?: string;
+  brand?: ReactNode | undefined;
+  footer?: ReactNode | undefined;
+  collapsed?: boolean | undefined;
+  className?: string | undefined;
 }) {
   return (
     <aside
@@ -92,9 +92,9 @@ export function Topbar({
   className,
 }: {
   title: string;
-  subtitle?: string;
-  actions?: ReactNode;
-  className?: string;
+  subtitle?: string | undefined;
+  actions?: ReactNode | undefined;
+  className?: string | undefined;
 }) {
   return (
     <header

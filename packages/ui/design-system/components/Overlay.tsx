@@ -45,14 +45,14 @@ export function DSDialog({
   className,
   children,
 }: {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  trigger?: ReactNode;
+  open?: boolean | undefined;
+  onOpenChange?: (open: boolean) => void | undefined;
+  trigger?: ReactNode | undefined;
   title: string;
-  description?: string;
-  footer?: ReactNode;
-  className?: string;
-  children?: ReactNode;
+  description?: string | undefined;
+  footer?: ReactNode | undefined;
+  className?: string | undefined;
+  children?: ReactNode | undefined;
 }) {
   return (
     <Dialog
@@ -75,8 +75,8 @@ export function DSDialog({
 export type MenuAction = {
   label: string;
   onSelect: () => void;
-  danger?: boolean;
-  separatorBefore?: boolean;
+  danger?: boolean | undefined;
+  separatorBefore?: boolean | undefined;
 };
 
 /** Dropdown padronizado. */
@@ -86,7 +86,7 @@ export function DSDropdown({
   actions,
 }: {
   trigger: ReactNode;
-  label?: string;
+  label?: string | undefined;
   actions: MenuAction[];
 }) {
   return (
@@ -145,7 +145,7 @@ export function DSTooltip({
   children,
 }: {
   content: ReactNode;
-  side?: "top" | "right" | "bottom" | "left";
+  side?: "top" | "right" | "bottom" | "left" | undefined;
   children: ReactNode;
 }) {
   return (

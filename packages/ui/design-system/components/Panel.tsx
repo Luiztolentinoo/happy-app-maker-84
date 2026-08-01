@@ -12,9 +12,9 @@ export function Panel({
   className,
   children,
 }: {
-  level?: GlassLevel;
-  hover?: boolean;
-  className?: string;
+  level?: GlassLevel | undefined;
+  hover?: boolean | undefined;
+  className?: string | undefined;
   children: ReactNode;
 }) {
   return (
@@ -41,12 +41,12 @@ export function Module({
   className,
   children,
 }: {
-  icon?: LucideIcon;
-  title?: string;
-  hint?: string;
-  action?: ReactNode;
-  level?: GlassLevel;
-  className?: string;
+  icon?: LucideIcon | undefined;
+  title?: string | undefined;
+  hint?: string | undefined;
+  action?: ReactNode | undefined;
+  level?: GlassLevel | undefined;
+  className?: string | undefined;
   children: ReactNode;
 }) {
   return (
@@ -79,8 +79,8 @@ export function SectionTitle({
   action,
 }: {
   title: string;
-  hint?: string;
-  action?: ReactNode;
+  hint?: string | undefined;
+  action?: ReactNode | undefined;
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-3">

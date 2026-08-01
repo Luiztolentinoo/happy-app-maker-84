@@ -29,7 +29,7 @@ export type StatusKind =
 
 export const statusMap: Record<
   StatusKind,
-  { label: string; tone: Tone; icon: LucideIcon; spin?: boolean; pulse?: boolean }
+  { label: string; tone: Tone; icon: LucideIcon; spin?: boolean | undefined; pulse?: boolean }
 > = {
   idle: { label: "Inativo", tone: "muted", icon: Clock },
   buffering: { label: "Buffer ativo", tone: "blue", icon: Activity, pulse: true },
@@ -50,9 +50,9 @@ export function StatusIndicator({
   className,
 }: {
   status: StatusKind;
-  label?: string;
-  variant?: "chip" | "dot" | "inline";
-  className?: string;
+  label?: string | undefined;
+  variant?: "chip" | "dot" | "inline" | undefined;
+  className?: string | undefined;
 }) {
   const config = statusMap[status];
   const text = label ?? config.label;

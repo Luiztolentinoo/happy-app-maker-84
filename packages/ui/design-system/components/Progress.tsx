@@ -9,9 +9,9 @@ export function ProgressBar({
   label,
 }: {
   percent: number;
-  tone?: Tone;
-  className?: string;
-  label?: string;
+  tone?: Tone | undefined;
+  className?: string | undefined;
+  label?: string | undefined;
 }) {
   const clamped = Math.min(100, Math.max(0, percent));
   return (
@@ -43,9 +43,9 @@ export function Meter({
   className,
 }: {
   percent: number;
-  tone?: Tone;
-  segments?: number;
-  className?: string;
+  tone?: Tone | undefined;
+  segments?: number | undefined;
+  className?: string | undefined;
 }) {
   const clamped = Math.min(100, Math.max(0, percent));
   const filled = Math.round((clamped / 100) * segments);
@@ -79,8 +79,8 @@ export function Gauge({
   label: string;
   value: string;
   percent: number;
-  tone?: Tone;
-  className?: string;
+  tone?: Tone | undefined;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("rounded-lg border border-border-primary bg-background/40 p-4", className)}>
@@ -101,9 +101,9 @@ export function RadialGauge({
   children,
 }: {
   percent: number;
-  size?: number;
-  tone?: Tone;
-  children?: React.ReactNode;
+  size?: number | undefined;
+  tone?: Tone | undefined;
+  children?: React.ReactNode | undefined;
 }) {
   const clamped = Math.min(100, Math.max(0, percent));
   return (
@@ -130,9 +130,9 @@ export function Sparkline({
   className,
 }: {
   values: number[];
-  tone?: Tone;
-  height?: number;
-  className?: string;
+  tone?: Tone | undefined;
+  height?: number | undefined;
+  className?: string | undefined;
 }) {
   if (values.length === 0) return null;
   const max = Math.max(...values, 1);

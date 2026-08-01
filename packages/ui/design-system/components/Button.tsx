@@ -40,12 +40,12 @@ export const dsButtonVariants = cva(
 
 export type DSButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof dsButtonVariants> & {
-    icon?: LucideIcon;
-    iconSize?: IconSize;
-    trailingIcon?: LucideIcon;
+    icon?: LucideIcon | undefined;
+    iconSize?: IconSize | undefined;
+    trailingIcon?: LucideIcon | undefined;
     /** Efeito ripple ao clicar (padrão: ligado). */
-    ripple?: boolean;
-    children?: ReactNode;
+    ripple?: boolean | undefined;
+    children?: ReactNode | undefined;
   };
 
 export const Button = forwardRef<HTMLButtonElement, DSButtonProps>(function Button(
@@ -91,10 +91,10 @@ export function CaptureButton({
   label = "SALVAR",
 }: {
   onClick: () => void;
-  disabled?: boolean;
-  hotkey?: string;
+  disabled?: boolean | undefined;
+  hotkey?: string | undefined;
   icon: LucideIcon;
-  label?: string;
+  label?: string | undefined;
 }) {
   return (
     <div className="flex flex-col items-center gap-2">

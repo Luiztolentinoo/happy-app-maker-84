@@ -14,10 +14,10 @@ export function Badge({
   className,
   children,
 }: {
-  tone?: Tone;
-  dot?: boolean;
-  pulse?: boolean;
-  className?: string;
+  tone?: Tone | undefined;
+  dot?: boolean | undefined;
+  pulse?: boolean | undefined;
+  className?: string | undefined;
   children: ReactNode;
 }) {
   return (
@@ -44,7 +44,7 @@ export const badgePresets = {
   success: { tone: "green", label: "Concluído" },
 } as const satisfies Record<
   string,
-  { tone: Tone; label: string; dot?: boolean; pulse?: boolean }
+  { tone: Tone; label: string; dot?: boolean | undefined; pulse?: boolean }
 >;
 
 export type BadgePreset = keyof typeof badgePresets;
@@ -56,8 +56,8 @@ export function StatusBadge({
   className,
 }: {
   preset: BadgePreset;
-  label?: string;
-  className?: string;
+  label?: string | undefined;
+  className?: string | undefined;
 }) {
   const config = badgePresets[preset];
   return (
@@ -78,8 +78,8 @@ export function Chip({
   className,
   children,
 }: {
-  tone?: Tone;
-  className?: string;
+  tone?: Tone | undefined;
+  className?: string | undefined;
   children: ReactNode;
 }) {
   return <Badge tone={tone} className={cn("normal-case tracking-normal", className)}>{children}</Badge>;

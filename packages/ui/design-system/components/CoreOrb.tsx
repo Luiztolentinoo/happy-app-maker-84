@@ -36,16 +36,16 @@ export function CoreOrb({
   children,
 }: {
   state: OrbState;
-  tone?: Tone;
-  animation?: "orbPulse" | "pulse" | "glow" | "none";
+  tone?: Tone | undefined;
+  animation?: "orbPulse" | "pulse" | "glow" | "none" | undefined;
   /** 0.4 = discreto, 1 = padrão, 1.6 = intenso. */
-  intensity?: number;
-  size?: number;
-  caption?: ReactNode;
+  intensity?: number | undefined;
+  size?: number | undefined;
+  caption?: ReactNode | undefined;
   /** Incremente para disparar a explosão de brilho. */
-  burstKey?: number;
-  className?: string;
-  children?: ReactNode;
+  burstKey?: number | undefined;
+  className?: string | undefined;
+  children?: ReactNode | undefined;
 }) {
   const config = orbStateConfig[state];
   const color = toneVar[tone ?? config.tone];

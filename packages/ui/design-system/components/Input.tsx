@@ -22,10 +22,10 @@ export function Field({
   children,
 }: {
   label: string;
-  hint?: string;
-  htmlFor?: string;
-  action?: ReactNode;
-  className?: string;
+  hint?: string | undefined;
+  htmlFor?: string | undefined;
+  action?: ReactNode | undefined;
+  className?: string | undefined;
   children: ReactNode;
 }) {
   return (
@@ -62,8 +62,8 @@ export function SelectInput({
   value: string;
   onValueChange: (value: string) => void;
   options: ReadonlyArray<{ value: string; label: string }>;
-  placeholder?: string;
-  className?: string;
+  placeholder?: string | undefined;
+  className?: string | undefined;
 }) {
   return (
     <Select value={value} onValueChange={onValueChange}>
@@ -88,7 +88,7 @@ export function ToggleField({
   onCheckedChange,
 }: {
   label: string;
-  hint?: string;
+  hint?: string | undefined;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
 }) {
@@ -116,8 +116,8 @@ export function SliderField({
   value: number;
   min: number;
   max: number;
-  step?: number;
-  format?: (value: number) => string;
+  step?: number | undefined;
+  format?: (value: number) => string | undefined;
   onChange: (value: number) => void;
 }) {
   return (
@@ -140,8 +140,8 @@ export function HotkeyInput({
   invalid,
 }: {
   value: string;
-  onCapture?: () => void;
-  invalid?: boolean;
+  onCapture?: () => void | undefined;
+  invalid?: boolean | undefined;
 }) {
   return (
     <button

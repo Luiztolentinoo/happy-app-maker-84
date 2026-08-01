@@ -35,12 +35,12 @@ const ICON_COLOR = {
 } as const;
 
 const HARDWARE = [
-  { label: "GPU · NVENC", value: "ONLINE", percent: 88, tone: "primary" as const },
-  { label: "CPU", value: "18%", percent: 18, tone: "electric" as const },
-  { label: "Storage", value: "GOOD", percent: 72, tone: "success" as const },
-  { label: "Encoder", value: "READY", percent: 95, tone: "primary" as const },
-  { label: "Áudio", value: "READY", percent: 64, tone: "success" as const },
-  { label: "Rede", value: "STABLE", percent: 80, tone: "electric" as const },
+  { label: "GPU · NVENC", value: "ONLINE", percent: 88, tone: "purple" as const },
+  { label: "CPU", value: "18%", percent: 18, tone: "blue" as const },
+  { label: "Storage", value: "GOOD", percent: 72, tone: "green" as const },
+  { label: "Encoder", value: "READY", percent: 95, tone: "purple" as const },
+  { label: "Áudio", value: "READY", percent: 64, tone: "green" as const },
+  { label: "Rede", value: "STABLE", percent: 80, tone: "blue" as const },
 ];
 
 function DiagnosticsPage() {

@@ -21,10 +21,10 @@ export function Icon({
   label,
 }: {
   icon: LucideIcon;
-  size?: IconSize;
-  tone?: Tone;
-  className?: string;
-  label?: string;
+  size?: IconSize | undefined;
+  tone?: Tone | undefined;
+  className?: string | undefined;
+  label?: string | undefined;
 }) {
   return (
     <Component

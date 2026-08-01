@@ -11,9 +11,9 @@ export function Loading({
   size = "md",
   className,
 }: {
-  label?: string;
-  size?: "sm" | "md" | "lg";
-  className?: string;
+  label?: string | undefined;
+  size?: "sm" | "md" | "lg" | undefined;
+  className?: string | undefined;
 }) {
   const map = { sm: "size-4", md: "size-6", lg: "size-8" } as const;
   return (
@@ -64,11 +64,11 @@ export function EmptyState({
   action,
   className,
 }: {
-  icon?: LucideIcon;
+  icon?: LucideIcon | undefined;
   title: string;
-  description?: string;
-  action?: ReactNode;
-  className?: string;
+  description?: string | undefined;
+  action?: ReactNode | undefined;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("flex flex-col items-center justify-center gap-3 px-6 py-14 text-center", className)}>
@@ -90,11 +90,11 @@ export function ErrorState({
   retryLabel = "Tentar novamente",
   className,
 }: {
-  title?: string;
-  description?: string;
-  onRetry?: () => void;
-  retryLabel?: string;
-  className?: string;
+  title?: string | undefined;
+  description?: string | undefined;
+  onRetry?: () => void | undefined;
+  retryLabel?: string | undefined;
+  className?: string | undefined;
 }) {
   return (
     <div className={cn("flex flex-col items-center justify-center gap-3 px-6 py-14 text-center", className)} role="alert">

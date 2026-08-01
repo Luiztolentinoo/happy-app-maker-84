@@ -156,9 +156,9 @@ function Dashboard() {
 
           <Module icon={MonitorPlay} title="Telemetria de hardware">
             <div className="grid gap-3">
-              <Gauge label="GPU · NVENC" value="42%" percent={42} tone="primary" />
-              <Gauge label="CPU" value="18%" percent={18} tone="electric" />
-              <Gauge label="RAM" value="9,4 GB" percent={58} tone="success" />
+              <Gauge label="GPU · NVENC" value="42%" percent={42} tone="purple" />
+              <Gauge label="CPU" value="18%" percent={18} tone="blue" />
+              <Gauge label="RAM" value="9,4 GB" percent={58} tone="green" />
             </div>
           </Module>
 
