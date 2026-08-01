@@ -1,0 +1,30 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Minimum permissions required by the ClipCore desktop shell.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-start-dragging",
+    "core:window:allow-minimize",
+    "core:window:allow-close",
+    "core:event:default",
+    "global-shortcut:default",
+    "autostart:default",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "opener:allow-reveal-item-in-dir",
+    {
+      "identifier": "fs:allow-read-file",
+      "allow": [{ "path": "$VIDEO/ClipCore/**" }, { "path": "$APPDATA/ClipCore/**" }]
+    },
+    {
+      "identifier": "fs:allow-write-file",
+      "allow": [{ "path": "$VIDEO/ClipCore/**" }, { "path": "$APPDATA/ClipCore/**" }]
+    },
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [{ "name": "ffmpeg", "sidecar": true, "args": true }]
+    }
+  ]
+}
