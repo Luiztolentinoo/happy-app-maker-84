@@ -107,7 +107,7 @@ function Dashboard() {
         title="Centro de comando"
         subtitle={`${APP_NAME} — motor de captura, hardware e clipes recentes`}
         actions={
-          <Badge tone={state === "error" ? "destructive" : "success"}>
+          <Badge tone={state === "error" ? "red" : "green"}>
             {STATE_LABEL[state]}
           </Badge>
         }

@@ -13,7 +13,7 @@ import {
   Radio,
 } from "lucide-react";
 import { APP_NAME, isDemoMode } from "@/lib/clipcore";
-import { StatusChip } from "@/components/Module";
+import { Badge, Sidebar, MobileNav, type NavItem } from "@ds";
 
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -103,7 +103,7 @@ export function AppShell({
           </div>
           <div className="flex shrink-0 items-center gap-3">
             {actions}
-            {isDemoMode() ? <StatusChip tone="warning">demo</StatusChip> : null}
+            {isDemoMode() ? <Badge tone="yellow">demo</Badge> : null}
           </div>
         </header>
         <main className="flex-1 px-6 py-8 md:px-10">{children}</main>

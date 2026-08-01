@@ -32,7 +32,7 @@ function AccountPage() {
       title="Conta"
       subtitle="Perfil local — nenhuma conta na nuvem é necessária"
       actions={
-        <Badge tone={isNativeMode() ? "success" : "warning"}>
+        <Badge tone={isNativeMode() ? "green" : "yellow"}>
           {isNativeMode() ? "desktop" : "prévia web"}
         </Badge>
       }
