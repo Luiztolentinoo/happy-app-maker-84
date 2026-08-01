@@ -247,3 +247,7 @@
   text-transform: uppercase;
   color: var(--text-muted);
 }
+
+#lovable-badge {
+  display: none !important;
+}
