@@ -65,7 +65,7 @@ export function AppShell({
           </div>
           {isDemoMode() ? (
             <span className="rounded-full border border-warning/40 bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
-              Dados simulados
+              Modo demonstração
             </span>
           ) : null}
         </header>
