@@ -1,0 +1,8 @@
+{
+  "name": "@clipcore/types",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.ts",
+  "description": "Shared TypeScript contracts mirroring the Rust command payloads."
+}
