@@ -8,7 +8,7 @@ import {
   Gamepad2,
   Radio,
 } from "lucide-react";
-import { APP_NAME, DEMO_MODE } from "@/lib/clipcore";
+import { APP_NAME, isDemoMode } from "@/lib/clipcore";
 
 const NAV = [
   { to: "/", label: "Início", icon: LayoutDashboard },
@@ -63,7 +63,7 @@ export function AppShell({
             <h1 className="text-2xl font-semibold">{title}</h1>
             {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
           </div>
-          {DEMO_MODE ? (
+          {isDemoMode() ? (
             <span className="rounded-full border border-warning/40 bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
               Dados simulados
             </span>
