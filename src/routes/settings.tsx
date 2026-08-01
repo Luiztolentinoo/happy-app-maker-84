@@ -23,7 +23,6 @@ import {
   TextInput,
   ToggleField,
 } from "@ds";
-import { Button } from "@/components/ui/button";
 import { type ClipcoreSettings, useSettings } from "@/hooks/use-settings";
 import { BUFFER_OPTIONS, estimateSizePerMinute, formatBytes, hotkeyIssues } from "@/lib/clipcore";
 
@@ -110,7 +109,7 @@ function SettingsPage() {
       actions={
         dirty ? (
           <Badge tone="green">
-            <Check className="size-3" /> alterações aplicadas
+            <Icon icon={Check} size="xs" /> alterações aplicadas
           </Badge>
         ) : (
           <Badge tone="muted">sem alterações</Badge>
@@ -120,7 +119,7 @@ function SettingsPage() {
       <div className="grid gap-6 lg:grid-cols-[16rem_minmax(0,1fr)]">
         <Module className="h-fit p-4 lg:sticky lg:top-32">
           <div className="relative mb-4">
-            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-muted" />
             <TextInput
               value={query}
               onChange={(e) => setQuery(e.target.value)}
