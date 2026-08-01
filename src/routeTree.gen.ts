@@ -10,15 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as DiagnosticsRouteImport } from './routes/diagnostics'
 import { Route as EditorRouteImport } from './routes/editor'
+import { Route as GamesRouteImport } from './routes/games'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as RecordingsRouteImport } from './routes/recordings'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as UploadsRouteImport } from './routes/uploads'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiagnosticsRoute = DiagnosticsRouteImport.update({
@@ -29,6 +37,11 @@ const DiagnosticsRoute = DiagnosticsRouteImport.update({
 const EditorRoute = EditorRouteImport.update({
   id: '/editor',
   path: '/editor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesRoute = GamesRouteImport.update({
+  id: '/games',
+  path: '/games',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LibraryRoute = LibraryRouteImport.update({
@@ -46,56 +59,92 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UploadsRoute = UploadsRouteImport.update({
+  id: '/uploads',
+  path: '/uploads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/diagnostics': typeof DiagnosticsRoute
   '/editor': typeof EditorRoute
+  '/games': typeof GamesRoute
   '/library': typeof LibraryRoute
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
+  '/uploads': typeof UploadsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/diagnostics': typeof DiagnosticsRoute
   '/editor': typeof EditorRoute
+  '/games': typeof GamesRoute
   '/library': typeof LibraryRoute
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
+  '/uploads': typeof UploadsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/diagnostics': typeof DiagnosticsRoute
   '/editor': typeof EditorRoute
+  '/games': typeof GamesRoute
   '/library': typeof LibraryRoute
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
+  '/uploads': typeof UploadsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/diagnostics' | '/editor' | '/library' | '/recordings' | '/settings'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    '/' | '/diagnostics' | '/editor' | '/library' | '/recordings' | '/settings'
-  id:
-    | '__root__'
     | '/'
+    | '/account'
     | '/diagnostics'
     | '/editor'
+    | '/games'
     | '/library'
     | '/recordings'
     | '/settings'
+    | '/uploads'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/account'
+    | '/diagnostics'
+    | '/editor'
+    | '/games'
+    | '/library'
+    | '/recordings'
+    | '/settings'
+    | '/uploads'
+  id:
+    | '__root__'
+    | '/'
+    | '/account'
+    | '/diagnostics'
+    | '/editor'
+    | '/games'
+    | '/library'
+    | '/recordings'
+    | '/settings'
+    | '/uploads'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   DiagnosticsRoute: typeof DiagnosticsRoute
   EditorRoute: typeof EditorRoute
+  GamesRoute: typeof GamesRoute
   LibraryRoute: typeof LibraryRoute
   RecordingsRoute: typeof RecordingsRoute
   SettingsRoute: typeof SettingsRoute
+  UploadsRoute: typeof UploadsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -105,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/diagnostics': {
@@ -119,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/editor'
       fullPath: '/editor'
       preLoaderRoute: typeof EditorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games': {
+      id: '/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/library': {
@@ -142,16 +205,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/uploads': {
+      id: '/uploads'
+      path: '/uploads'
+      fullPath: '/uploads'
+      preLoaderRoute: typeof UploadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   DiagnosticsRoute: DiagnosticsRoute,
   EditorRoute: EditorRoute,
+  GamesRoute: GamesRoute,
   LibraryRoute: LibraryRoute,
   RecordingsRoute: RecordingsRoute,
   SettingsRoute: SettingsRoute,
+  UploadsRoute: UploadsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
