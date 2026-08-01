@@ -4,13 +4,17 @@ import {
   Film,
   FolderOpen,
   Heart,
+  MoreHorizontal,
   Pencil,
+  Play,
   RotateCcw,
+  Scissors,
   Search,
   Trash2,
   Upload,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { Module, StatusChip } from "@/components/Module";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useClips } from "@/hooks/use-clips";
@@ -19,28 +23,31 @@ import { type Clip, formatBytes, formatDateTime, formatDuration } from "@/lib/cl
 export const Route = createFileRoute("/library")({
   head: () => ({
     meta: [
-      { title: "Biblioteca de clipes — ClipCore" },
+      { title: "Galeria de clipes — ClipCore" },
       {
         name: "description",
         content:
-          "Organize, renomeie, favorite, exclua e restaure seus clipes. Reproduza arquivos de vídeo locais direto no player do ClipCore.",
+          "Galeria moderna de clipes com miniaturas grandes, favoritos, filtros rápidos, ordenação, agrupamento e player integrado.",
       },
-      { property: "og:title", content: "Biblioteca de clipes — ClipCore" },
+      { property: "og:title", content: "Galeria de clipes — ClipCore" },
       {
         property: "og:description",
-        content: "Filtros por jogo, favoritos e tipo, com lixeira e player integrado.",
+        content: "Reproduza, edite, exporte e favorite clipes em uma galeria de alta densidade.",
       },
     ],
   }),
   component: LibraryPage,
 });
 
-type Filter = "all" | "favorites" | "retroactive" | "session" | "uploaded";
+type Filter = "all" | "favorites" | "recent" | "retroactive" | "session" | "uploaded";
+type Sort = "recent" | "duration" | "size" | "title";
 
 function LibraryPage() {
   const { clips, trash, ready, rename, toggleFavorite, remove, restore, resetDemo } = useClips();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
+  const [sort, setSort] = useState<Sort>("recent");
+  const [grouped, setGrouped] = useState(true);
   const [selected, setSelected] = useState<Clip | null>(null);
   const [localSrc, setLocalSrc] = useState<string | null>(null);
   const [localName, setLocalName] = useState<string | null>(null);
@@ -48,15 +55,34 @@ function LibraryPage() {
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return clips.filter((c) => {
+    const cutoff = Date.now() - 86_400_000;
+    const list = clips.filter((c) => {
       if (q && !`${c.title} ${c.game} ${c.tags.join(" ")}`.toLowerCase().includes(q)) return false;
       if (filter === "favorites") return c.favorite;
+      if (filter === "recent") return new Date(c.capturedAt).getTime() >= cutoff;
       if (filter === "retroactive") return c.type === "retroactive";
       if (filter === "session") return c.type === "session";
       if (filter === "uploaded") return c.uploadStatus === "uploaded";
       return true;
     });
-  }, [clips, query, filter]);
+    return [...list].sort((a, b) => {
+      if (sort === "duration") return b.durationMs - a.durationMs;
+      if (sort === "size") return b.fileSize - a.fileSize;
+      if (sort === "title") return a.title.localeCompare(b.title);
+      return new Date(b.capturedAt).getTime() - new Date(a.capturedAt).getTime();
+    });
+  }, [clips, query, filter, sort]);
+
+  const groups = useMemo(() => {
+    if (!grouped) return [["Todos os clipes", visible]] as Array<[string, Clip[]]>;
+    const map = new Map<string, Clip[]>();
+    for (const clip of visible) {
+      const list = map.get(clip.game) ?? [];
+      list.push(clip);
+      map.set(clip.game, list);
+    }
+    return [...map.entries()];
+  }, [visible, grouped]);
 
   const active = selected ?? visible[0] ?? null;
 
@@ -68,140 +94,210 @@ function LibraryPage() {
   }
 
   return (
-    <AppShell title="Biblioteca" subtitle={`${clips.length} itens · ${trash.length} na lixeira`}>
-      <div className="grid gap-4 xl:grid-cols-[1fr_22rem]">
-        <section className="min-w-0">
-          <div className="mb-4 flex flex-wrap items-center gap-2">
-            <div className="relative min-w-52 flex-1">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Buscar por título, jogo ou tag"
-                className="pl-9"
-                aria-label="Buscar clipes"
-              />
+    <AppShell
+      title="Biblioteca"
+      subtitle={`${clips.length} clipes · ${trash.length} na lixeira`}
+      actions={<StatusChip tone="electric">{visible.length} visíveis</StatusChip>}
+    >
+      <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_25rem]">
+        <div className="min-w-0 space-y-6">
+          <Module>
+            <div className="grid gap-4">
+              <div className="relative">
+                <Search className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Buscar por título, jogo ou tag"
+                  className="h-11 pl-10"
+                  aria-label="Buscar clipes"
+                />
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {(
+                  [
+                    ["all", "Todos"],
+                    ["favorites", "Favoritos"],
+                    ["recent", "Recentes"],
+                    ["retroactive", "Retroativos"],
+                    ["session", "Sessões"],
+                    ["uploaded", "Enviados"],
+                  ] as Array<[Filter, string]>
+                ).map(([value, label]) => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={filter === value ? "default" : "outline"}
+                    className="rounded-full"
+                    onClick={() => setFilter(value)}
+                  >
+                    {label}
+                  </Button>
+                ))}
+                <span className="mx-1 hidden h-6 w-px bg-border sm:block" />
+                {(
+                  [
+                    ["recent", "Mais recentes"],
+                    ["duration", "Duração"],
+                    ["size", "Tamanho"],
+                    ["title", "A–Z"],
+                  ] as Array<[Sort, string]>
+                ).map(([value, label]) => (
+                  <Button
+                    key={value}
+                    size="sm"
+                    variant={sort === value ? "secondary" : "ghost"}
+                    className="rounded-full"
+                    onClick={() => setSort(value)}
+                  >
+                    {label}
+                  </Button>
+                ))}
+                <Button
+                  size="sm"
+                  variant={grouped ? "secondary" : "ghost"}
+                  className="rounded-full"
+                  onClick={() => setGrouped((g) => !g)}
+                >
+                  Agrupar por jogo
+                </Button>
+              </div>
             </div>
-            {(
-              [
-                ["all", "Todos"],
-                ["favorites", "Favoritos"],
-                ["retroactive", "Retroativos"],
-                ["session", "Sessões"],
-                ["uploaded", "Enviados"],
-              ] as Array<[Filter, string]>
-            ).map(([value, label]) => (
-              <Button
-                key={value}
-                size="sm"
-                variant={filter === value ? "default" : "outline"}
-                onClick={() => setFilter(value)}
-              >
-                {label}
-              </Button>
-            ))}
-          </div>
+          </Module>
 
           {!ready ? (
-            <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
               {[0, 1, 2, 3].map((i) => (
-                <div key={i} className="h-44 animate-pulse rounded-lg bg-muted" />
+                <div key={i} className="h-56 animate-pulse rounded-xl bg-muted/60" />
               ))}
             </div>
           ) : visible.length === 0 ? (
-            <div className="panel flex flex-col items-center gap-3 p-10 text-center">
-              <Film className="size-8 text-muted-foreground" />
-              <p className="font-medium">Nenhum clipe encontrado</p>
-              <p className="max-w-sm text-sm text-muted-foreground">
-                Ajuste os filtros, gere um clipe simulado no painel inicial ou restaure os dados de
-                demonstração.
-              </p>
-              <Button variant="outline" size="sm" onClick={resetDemo}>
-                <RotateCcw /> Restaurar demonstração
-              </Button>
-            </div>
+            <Module>
+              <div className="flex flex-col items-center gap-3 py-10 text-center">
+                <Film className="size-8 text-muted-foreground" />
+                <p className="font-display text-lg font-semibold">Nenhum clipe encontrado</p>
+                <p className="max-w-sm text-sm text-muted-foreground">
+                  Ajuste os filtros, salve um clipe no centro de comando ou restaure os dados de
+                  demonstração.
+                </p>
+                <Button variant="outline" size="sm" onClick={resetDemo}>
+                  <RotateCcw /> Restaurar demonstração
+                </Button>
+              </div>
+            </Module>
           ) : (
-            <ul className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-              {visible.map((clip) => (
-                <li key={clip.id} className="panel overflow-hidden">
-                  <button
-                    onClick={() => setSelected(clip)}
-                    className="block w-full cursor-pointer text-left"
-                    aria-label={`Selecionar ${clip.title}`}
-                  >
-                    <div
-                      className="flex h-28 items-end justify-between p-3 text-xs"
-                      style={{
-                        background: `linear-gradient(140deg, ${clip.accent} 0%, oklch(0.2 0.02 265) 85%)`,
-                      }}
+            groups.map(([group, items]) => (
+              <section key={group} className="space-y-4">
+                <h2 className="label-caps">
+                  {group} · {items.length}
+                </h2>
+                <ul className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
+                  {items.map((clip) => (
+                    <li
+                      key={clip.id}
+                      className="module group animate-rise overflow-hidden p-0"
                     >
-                      <span className="rounded bg-background/60 px-1.5 py-0.5">
-                        {clip.durationMs > 0 ? formatDuration(clip.durationMs) : "imagem"}
-                      </span>
-                      <span className="rounded bg-background/60 px-1.5 py-0.5">
-                        {clip.height}p{clip.fps}
-                      </span>
-                    </div>
-                  </button>
-                  <div className="p-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium">{clip.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {clip.game} · {formatDateTime(clip.capturedAt)} ·{" "}
-                          {formatBytes(clip.fileSize)}
-                        </p>
+                      <div
+                        className="relative aspect-video"
+                        style={{
+                          background: `linear-gradient(140deg, ${clip.accent} 0%, oklch(0.19 0.022 264) 88%)`,
+                        }}
+                      >
+                        <div className="absolute inset-x-3 top-3 flex items-center justify-between text-[11px]">
+                          <span className="rounded-full bg-background/70 px-2 py-0.5 backdrop-blur-sm">
+                            {clip.durationMs > 0 ? formatDuration(clip.durationMs) : "imagem"}
+                          </span>
+                          <span className="rounded-full bg-background/70 px-2 py-0.5 backdrop-blur-sm">
+                            {clip.height}p{clip.fps}
+                          </span>
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center gap-2 bg-background/70 opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 focus-within:opacity-100">
+                          <Button
+                            size="icon"
+                            aria-label={`Reproduzir ${clip.title}`}
+                            className="min-h-11 min-w-11 rounded-full"
+                            onClick={() => setSelected(clip)}
+                          >
+                            <Play />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            aria-label={`Editar ${clip.title}`}
+                            className="min-h-11 min-w-11 rounded-full"
+                            onClick={() => {
+                              const next = window.prompt("Novo título", clip.title);
+                              if (next && next.trim()) rename(clip.id, next.trim());
+                            }}
+                          >
+                            <Scissors />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            aria-label={`Exportar ${clip.title}`}
+                            className="min-h-11 min-w-11 rounded-full"
+                            onClick={() => setSelected(clip)}
+                          >
+                            <Upload />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            aria-label={`Favoritar ${clip.title}`}
+                            className="min-h-11 min-w-11 rounded-full"
+                            onClick={() => toggleFavorite(clip.id)}
+                          >
+                            <Heart
+                              className={clip.favorite ? "fill-destructive text-destructive" : ""}
+                            />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            aria-label={`Mais ações para ${clip.title}`}
+                            className="min-h-11 min-w-11 rounded-full"
+                            onClick={() => {
+                              remove(clip.id);
+                              if (selected?.id === clip.id) setSelected(null);
+                            }}
+                          >
+                            <MoreHorizontal />
+                          </Button>
+                        </div>
                       </div>
-                      {clip.uploadStatus === "uploaded" ? (
-                        <Upload className="size-3.5 shrink-0 text-success" aria-label="Enviado" />
-                      ) : null}
-                    </div>
-                    <div className="mt-3 flex gap-1">
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        aria-label="Favoritar"
-                        onClick={() => toggleFavorite(clip.id)}
-                      >
-                        <Heart
-                          className={clip.favorite ? "fill-destructive text-destructive" : ""}
-                        />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        aria-label="Renomear"
-                        onClick={() => {
-                          const next = window.prompt("Novo título", clip.title);
-                          if (next && next.trim()) rename(clip.id, next.trim());
-                        }}
-                      >
-                        <Pencil />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        aria-label="Mover para a lixeira"
-                        onClick={() => {
-                          remove(clip.id);
-                          if (selected?.id === clip.id) setSelected(null);
-                        }}
-                      >
-                        <Trash2 />
-                      </Button>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 p-4">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-semibold">{clip.title}</p>
+                          <p className="truncate text-xs text-muted-foreground">
+                            {clip.game} · {formatDateTime(clip.capturedAt)} ·{" "}
+                            {formatBytes(clip.fileSize)}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-1.5">
+                          {clip.favorite ? (
+                            <Heart className="size-3.5 fill-destructive text-destructive" />
+                          ) : null}
+                          {clip.uploadStatus === "uploaded" ? (
+                            <Upload className="size-3.5 text-success" aria-label="Enviado" />
+                          ) : null}
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
           )}
 
           {trash.length > 0 ? (
-            <div className="panel mt-4 p-4">
-              <h2 className="mb-2 text-sm font-semibold">Lixeira</h2>
+            <Module icon={Trash2} title="Lixeira">
               <ul className="space-y-2">
                 {trash.map((clip) => (
-                  <li key={clip.id} className="flex items-center justify-between gap-3 text-sm">
+                  <li
+                    key={clip.id}
+                    className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border bg-background/40 px-3.5 py-2.5 text-sm"
+                  >
                     <span className="truncate text-muted-foreground">{clip.title}</span>
                     <Button size="sm" variant="outline" onClick={() => restore(clip.id)}>
                       <RotateCcw /> Restaurar
@@ -209,56 +305,86 @@ function LibraryPage() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Module>
           ) : null}
-        </section>
+        </div>
 
-        <aside className="panel h-fit p-4">
-          <h2 className="mb-3 text-sm font-semibold">Player</h2>
-          <div className="overflow-hidden rounded-lg border border-border bg-black">
-            {localSrc ? (
-              // eslint-disable-next-line jsx-a11y/media-has-caption
-              <video src={localSrc} controls className="aspect-video w-full" />
-            ) : (
+        <aside className="h-fit space-y-6 2xl:sticky 2xl:top-32">
+          <Module icon={Play} title="Player">
+            <div className="relative overflow-hidden rounded-xl border border-border">
               <div
-                className="grid aspect-video place-items-center p-4 text-center text-xs text-foreground/70"
+                className="absolute inset-0 scale-110 blur-2xl"
                 style={{
-                  background: `linear-gradient(140deg, ${active?.accent ?? "oklch(0.3 0.03 265)"} 0%, oklch(0.16 0.02 265) 85%)`,
+                  background: `linear-gradient(140deg, ${active?.accent ?? "oklch(0.3 0.03 264)"} 0%, oklch(0.16 0.02 265) 85%)`,
+                  opacity: 0.7,
                 }}
-              >
-                Miniatura simulada — abra um arquivo de vídeo local para reproduzir.
+              />
+              <div className="relative">
+                {localSrc ? (
+                  // eslint-disable-next-line jsx-a11y/media-has-caption
+                  <video src={localSrc} controls className="aspect-video w-full bg-black" />
+                ) : (
+                  <div className="grid aspect-video place-items-center p-5 text-center text-xs text-foreground/70">
+                    Miniatura simulada — abra um arquivo de vídeo local para reproduzir.
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <p className="mt-3 truncate text-sm font-medium">
-            {localName ?? active?.title ?? "Nenhum clipe selecionado"}
-          </p>
-          {active && !localName ? (
-            <dl className="mt-2 grid grid-cols-2 gap-y-1 text-xs text-muted-foreground">
-              <dt>Jogo</dt>
-              <dd className="text-right text-foreground">{active.game}</dd>
-              <dt>Duração</dt>
-              <dd className="text-right text-foreground">{formatDuration(active.durationMs)}</dd>
-              <dt>Resolução</dt>
-              <dd className="text-right text-foreground">
-                {active.width}×{active.height}
-              </dd>
-              <dt>Codec</dt>
-              <dd className="text-right text-foreground">{active.codec}</dd>
-              <dt>Tamanho</dt>
-              <dd className="text-right text-foreground">{formatBytes(active.fileSize)}</dd>
-            </dl>
-          ) : null}
-          <input
-            ref={fileInput}
-            type="file"
-            accept="video/*"
-            className="hidden"
-            onChange={(e) => pickLocalFile(e.target.files?.[0])}
-          />
-          <Button variant="outline" className="mt-4 w-full" onClick={() => fileInput.current?.click()}>
-            <FolderOpen /> Abrir vídeo local
-          </Button>
+            </div>
+
+            {!localSrc ? (
+              <div className="mt-4">
+                <div className="group relative h-2.5 cursor-pointer overflow-hidden rounded-full bg-background/70">
+                  <div
+                    className="h-full rounded-full transition-[width] duration-300"
+                    style={{
+                      width: "38%",
+                      background: "linear-gradient(90deg, var(--primary), var(--electric))",
+                      boxShadow: "0 0 16px -2px var(--primary)",
+                    }}
+                  />
+                  <div className="pointer-events-none absolute inset-y-0 left-[38%] w-px bg-foreground/70" />
+                </div>
+                <div className="mt-2 flex justify-between font-mono text-[11px] text-muted-foreground">
+                  <span>00:11</span>
+                  <span>{active ? formatDuration(active.durationMs) : "00:00"}</span>
+                </div>
+              </div>
+            ) : null}
+
+            <p className="mt-4 truncate text-sm font-semibold">
+              {localName ?? active?.title ?? "Nenhum clipe selecionado"}
+            </p>
+            {active && !localName ? (
+              <dl className="mt-3 grid grid-cols-2 gap-y-1.5 text-xs text-muted-foreground">
+                <dt>Jogo</dt>
+                <dd className="text-right text-foreground">{active.game}</dd>
+                <dt>Duração</dt>
+                <dd className="text-right text-foreground">{formatDuration(active.durationMs)}</dd>
+                <dt>Resolução</dt>
+                <dd className="text-right text-foreground">
+                  {active.width}×{active.height}
+                </dd>
+                <dt>Codec</dt>
+                <dd className="text-right text-foreground">{active.codec}</dd>
+                <dt>Tamanho</dt>
+                <dd className="text-right text-foreground">{formatBytes(active.fileSize)}</dd>
+              </dl>
+            ) : null}
+            <input
+              ref={fileInput}
+              type="file"
+              accept="video/*"
+              className="hidden"
+              onChange={(e) => pickLocalFile(e.target.files?.[0])}
+            />
+            <Button
+              variant="outline"
+              className="mt-5 w-full"
+              onClick={() => fileInput.current?.click()}
+            >
+              <FolderOpen /> Abrir vídeo local
+            </Button>
+          </Module>
         </aside>
       </div>
     </AppShell>
