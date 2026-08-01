@@ -1,0 +1,56 @@
+[package]
+name = "clipcore"
+version = "0.1.0"
+description = "ClipCore - retroactive game clip capture for Windows"
+authors = ["ClipCore"]
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "clipcore_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-global-shortcut = "2"
+tauri-plugin-autostart = "2"
+tauri-plugin-updater = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "1"
+parking_lot = "0.12"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+rusqlite = { version = "0.32", features = ["bundled", "chrono", "uuid"] }
+sha2 = "0.10"
+log = "0.4"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.58", features = [
+  "Graphics_Capture",
+  "Win32_Graphics_Direct3D11",
+  "Win32_Graphics_Dxgi",
+  "Win32_Media_MediaFoundation",
+  "Win32_Media_Audio",
+  "Win32_System_Threading",
+  "Win32_System_ProcessStatus",
+] }
+
+[features]
+default = ["mock-capture"]
+# Real Windows capture stack (requires Windows SDK toolchain).
+windows-capture = []
+# Deterministic mock backends used for tests and non-Windows dev machines.
+mock-capture = []
+
+[dev-dependencies]
+tempfile = "3"

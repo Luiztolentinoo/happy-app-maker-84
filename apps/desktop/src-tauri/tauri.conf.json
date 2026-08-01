@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "ClipCore",
+  "version": "0.1.0",
+  "identifier": "dev.clipcore.app",
+  "build": {
+    "beforeDevCommand": "bun run dev",
+    "devUrl": "http://localhost:8080",
+    "beforeBuildCommand": "bun run build",
+    "frontendDist": "../../../dist/client"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "ClipCore",
+        "label": "main",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 1080,
+        "minHeight": 720,
+        "resizable": true,
+        "decorations": true,
+        "theme": "Dark",
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data:; media-src 'self' asset: http://asset.localhost blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com"
+    },
+    "trayIcon": {
+      "id": "clipcore-tray",
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": false,
+      "tooltip": "ClipCore"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "active": false,
+      "endpoints": ["https://updates.clipcore.dev/{{target}}/{{arch}}/{{current_version}}"],
+      "dialog": true,
+      "pubkey": "REPLACE_WITH_TAURI_UPDATER_PUBLIC_KEY"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis", "msi", "updater"],
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/icon.ico", "icons/icon.png"],
+    "externalBin": ["binaries/ffmpeg"],
+    "resources": ["migrations/*"],
+    "shortDescription": "Retroactive game clip capture",
+    "longDescription": "ClipCore records your gameplay into a rolling buffer so you can save the last moments of action instantly.",
+    "windows": {
+      "webviewInstallMode": { "type": "embedBootstrapper" },
+      "nsis": {
+        "installMode": "perMachine",
+        "displayLanguageSelector": true,
+        "languages": ["English", "PortugueseBR"]
+      }
+    }
+  }
+}
