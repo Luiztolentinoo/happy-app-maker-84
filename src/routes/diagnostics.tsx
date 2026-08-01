@@ -28,6 +28,11 @@ export const Route = createFileRoute("/diagnostics")({
 const ICONS = { pass: CheckCircle2, warn: CircleAlert, fail: XCircle } as const;
 const TONES = { pass: "success", warn: "warning", fail: "destructive" } as const;
 const STATUS_TEXT = { pass: "online", warn: "check", fail: "offline" } as const;
+const ICON_COLOR = {
+  pass: "text-success",
+  warn: "text-warning",
+  fail: "text-destructive",
+} as const;
 
 const HARDWARE = [
   { label: "GPU · NVENC", value: "ONLINE", percent: 88, tone: "primary" as const },
@@ -78,7 +83,7 @@ function DiagnosticsPage() {
                   key={r.id}
                   className="grid animate-rise grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 rounded-xl border border-border bg-background/40 p-4"
                 >
-                  <Icon className={`mt-0.5 size-4 shrink-0 text-${TONES[r.status]}`} />
+                  <Icon className={`mt-0.5 size-4 shrink-0 ${ICON_COLOR[r.status]}`} />
                   <div className="min-w-0">
                     <p className="text-sm font-semibold">{r.label}</p>
                     <p className="text-xs text-muted-foreground">{r.detail}</p>
