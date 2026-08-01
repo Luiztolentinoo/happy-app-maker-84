@@ -85,7 +85,7 @@ export function formatBytes(bytes: number): string {
     value /= 1024;
     i++;
   }
-  return `${value.toFixed(value < 10 ? 1 : 0)} ${units[i]}`;
+  return `${value.toFixed(value < 10 ? 1 : 0)} ${units[i] ?? "TB"}`;
 }
 
 export function formatDateTime(iso: string): string {
@@ -128,7 +128,7 @@ export function makeDemoClips(): Clip[] {
     fileSize: Math.max(2_400_000, durationMs * 900),
     type,
     favorite: i === 0 || i === 4,
-    uploadStatus: (["local", "uploaded", "uploading", "failed", "local"] as const)[i % 5],
+    uploadStatus: (["local", "uploaded", "uploading", "failed", "local"] as const)[i % 5]!,
     tags: type === "session" ? ["ranqueada"] : ["highlight"],
     accent,
   }));
