@@ -11,7 +11,7 @@ import {
   Volume2,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, StatusChip } from "@/components/Module";
+import { Module, Badge } from "@ds";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -100,11 +100,11 @@ function SettingsPage() {
       subtitle="Aplicadas e salvas automaticamente neste dispositivo"
       actions={
         dirty ? (
-          <StatusChip tone="success">
+          <Badge tone="green">
             <Check className="size-3" /> alterações aplicadas
-          </StatusChip>
+          </Badge>
         ) : (
-          <StatusChip tone="muted">sem alterações</StatusChip>
+          <Badge tone="muted">sem alterações</Badge>
         )
       }
     >

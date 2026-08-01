@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { CloudUpload } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, StatusChip } from "@/components/Module";
+import { Module, Badge } from "@ds";
 import { useClips } from "@/hooks/use-clips";
 import { formatBytes, formatDateTime } from "@/lib/clipcore";
 
@@ -27,9 +27,9 @@ export const Route = createFileRoute("/uploads")({
 
 const TONE = {
   local: "muted",
-  uploading: "electric",
-  uploaded: "success",
-  failed: "destructive",
+  uploading: "blue",
+  uploaded: "green",
+  failed: "red",
 } as const;
 
 const LABEL = {
@@ -50,7 +50,7 @@ function UploadsPage() {
     <AppShell
       title="Uploads"
       subtitle="Envio opcional — por padrão tudo permanece local"
-      actions={<StatusChip tone="electric">{pending} na fila</StatusChip>}
+      actions={<Badge tone="blue">{pending} na fila</Badge>}
     >
       <Module icon={CloudUpload} title="Fila de envio">
         <ul className="space-y-2.5">
@@ -65,7 +65,7 @@ function UploadsPage() {
                   {c.game} · {formatDateTime(c.capturedAt)} · {formatBytes(c.fileSize)}
                 </p>
               </div>
-              <StatusChip tone={TONE[c.uploadStatus]}>{LABEL[c.uploadStatus]}</StatusChip>
+              <Badge tone={TONE[c.uploadStatus]}>{LABEL[c.uploadStatus]}</Badge>
             </li>
           ))}
         </ul>

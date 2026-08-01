@@ -14,7 +14,7 @@ import {
   Upload,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, StatusChip } from "@/components/Module";
+import { Module, Badge } from "@ds";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useClips } from "@/hooks/use-clips";
@@ -97,7 +97,7 @@ function LibraryPage() {
     <AppShell
       title="Biblioteca"
       subtitle={`${clips.length} clipes · ${trash.length} na lixeira`}
-      actions={<StatusChip tone="electric">{visible.length} visíveis</StatusChip>}
+      actions={<Badge tone="blue">{visible.length} visíveis</Badge>}
     >
       <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_25rem]">
         <div className="min-w-0 space-y-6">

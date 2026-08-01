@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { Video } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, StatusChip } from "@/components/Module";
+import { Module, Badge } from "@ds";
 import { useClips } from "@/hooks/use-clips";
 import { formatBytes, formatDateTime, formatDuration } from "@/lib/clipcore";
 
@@ -34,7 +34,7 @@ function RecordingsPage() {
     <AppShell
       title="Gravações"
       subtitle="Sessões completas capturadas do início ao fim"
-      actions={<StatusChip tone="electric">{formatDuration(totalMs)} totais</StatusChip>}
+      actions={<Badge tone="blue">{formatDuration(totalMs)} totais</Badge>}
     >
       <Module icon={Video} title="Sessões">
         {sessions.length === 0 ? (

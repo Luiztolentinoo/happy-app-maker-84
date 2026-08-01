@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { Gamepad2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, StatusChip } from "@/components/Module";
+import { Module, Badge } from "@ds";
 import { useClips } from "@/hooks/use-clips";
 import { formatBytes, formatDuration } from "@/lib/clipcore";
 
@@ -44,7 +44,7 @@ function GamesPage() {
     <AppShell
       title="Jogos"
       subtitle="Perfis automáticos detectados pelo motor de captura"
-      actions={<StatusChip tone="primary">{games.length} títulos</StatusChip>}
+      actions={<Badge tone="purple">{games.length} títulos</Badge>}
     >
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {games.map(([game, stats]) => (
