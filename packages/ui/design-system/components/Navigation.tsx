@@ -40,14 +40,14 @@ export function Sidebar({
           <DSTooltip key={item.to} content={item.hint ?? item.label}>
             <Link
               to={item.to}
-              className="group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-ink-secondary transition-colors duration-200 hover:bg-surface-secondary/70 hover:text-ink data-[status=active]:bg-accent-purple/12 data-[status=active]:text-ink"
-              activeProps={{ "data-status": "active" }}
+              activeOptions={{ exact: item.to === "/" }}
+              className="group relative flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-ink-secondary transition-all duration-200 hover:translate-x-0.5 hover:bg-surface-secondary/70 hover:text-ink"
+              activeProps={{
+                className:
+                  "bg-surface-secondary/90 text-ink glow-purple before:absolute before:left-0 before:top-1/2 before:h-7 before:w-[3px] before:-translate-y-1/2 before:rounded-r-full before:bg-accent-purple",
+              }}
             >
-              <span
-                aria-hidden
-                className="absolute left-0 h-6 w-0.5 rounded-full bg-accent-purple opacity-0 transition-opacity duration-200 group-data-[status=active]:opacity-100"
-              />
-              <Icon icon={item.icon} size="md" className="group-data-[status=active]:text-accent-purple" />
+              <Icon icon={item.icon} size="md" className="transition-colors duration-200 group-hover:text-accent-purple" />
               {collapsed ? null : <span className="truncate">{item.label}</span>}
             </Link>
           </DSTooltip>
@@ -72,8 +72,9 @@ export function MobileNav({ items, className }: { items: NavItem[]; className?: 
         <Link
           key={item.to}
           to={item.to}
-          className="flex flex-col items-center gap-1 rounded-lg px-2 py-1 text-[10px] text-ink-muted data-[status=active]:text-accent-purple"
-          activeProps={{ "data-status": "active" }}
+          activeOptions={{ exact: item.to === "/" }}
+          className="flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-lg py-1 text-[11px] text-ink-muted transition-colors"
+          activeProps={{ className: "text-accent-purple" }}
         >
           <Icon icon={item.icon} size="md" />
           <span className="max-w-14 truncate">{item.label}</span>

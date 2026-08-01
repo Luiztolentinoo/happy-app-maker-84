@@ -1,5 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
+@source "../packages/ui/design-system";
+@import "../packages/ui/design-system/tokens.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -243,5 +245,5 @@
   font-size: 0.6875rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted-foreground);
+  color: var(--text-muted);
 }
