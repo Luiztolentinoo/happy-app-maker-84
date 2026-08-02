@@ -19,19 +19,19 @@ Studio, FFmpeg, bibliotecas de captura/áudio, terminal ou qualquer comando.
 
 ## Plataformas
 
-| Plataforma            | Estado                                             |
-| --------------------- | -------------------------------------------------- |
-| Windows 11 x64        | suportada (pendente validação real — ver test plan)|
-| Windows 10 x64        | suportada em builds ainda com suporte da Microsoft |
-| Windows ARM64         | **não** suportado: arquitetura preparada, sem build nem teste |
-| Windows 7 / 8         | não suportado                                      |
+| Plataforma     | Estado                                                        |
+| -------------- | ------------------------------------------------------------- |
+| Windows 11 x64 | suportada (pendente validação real — ver test plan)           |
+| Windows 10 x64 | suportada em builds ainda com suporte da Microsoft            |
+| Windows ARM64  | **não** suportado: arquitetura preparada, sem build nem teste |
+| Windows 7 / 8  | não suportado                                                 |
 
 ## Formatos
 
-| Formato | Arquivo                        | Público                | Modo            |
-| ------- | ------------------------------ | ---------------------- | --------------- |
-| NSIS    | `ClipCore-Setup-0.1.0-x64.exe` | usuário final (padrão) | `currentUser`   |
-| MSI     | `ClipCore-0.1.0-x64.msi`       | TI / corporativo       | por máquina     |
+| Formato | Arquivo                        | Público                | Modo          |
+| ------- | ------------------------------ | ---------------------- | ------------- |
+| NSIS    | `ClipCore-Setup-0.1.0-x64.exe` | usuário final (padrão) | `currentUser` |
+| MSI     | `ClipCore-0.1.0-x64.msi`       | TI / corporativo       | por máquina   |
 
 O instalador divulgado é o NSIS. O Tauri gera nomes internos
 (`ClipCore_0.1.0_x64-setup.exe`); `scripts/rename-artifacts.ps1` produz os nomes
@@ -51,16 +51,16 @@ Centralizada em `src/lib/distribution.ts` e refletida em `tauri.conf.json`:
 
 ## Caminhos
 
-| Conteúdo         | Caminho                                             |
-| ---------------- | --------------------------------------------------- |
-| App (por usuário)| `%LOCALAPPDATA%\Programs\ClipCore`                  |
-| App (por máquina)| `%PROGRAMFILES%\ClipCore` (MSI)                     |
-| Configurações    | `%APPDATA%\com.clipcore.desktop`                    |
-| Banco            | `%APPDATA%\com.clipcore.desktop\clipcore.db`        |
-| Cache            | `%LOCALAPPDATA%\com.clipcore.desktop\cache`         |
-| Logs             | `%LOCALAPPDATA%\com.clipcore.desktop\logs`          |
-| Atualizações     | `%LOCALAPPDATA%\com.clipcore.desktop\updates`       |
-| Clipes           | `%USERPROFILE%\Videos\ClipCore` (ou pasta escolhida)|
+| Conteúdo          | Caminho                                              |
+| ----------------- | ---------------------------------------------------- |
+| App (por usuário) | `%LOCALAPPDATA%\Programs\ClipCore`                   |
+| App (por máquina) | `%PROGRAMFILES%\ClipCore` (MSI)                      |
+| Configurações     | `%APPDATA%\com.clipcore.desktop`                     |
+| Banco             | `%APPDATA%\com.clipcore.desktop\clipcore.db`         |
+| Cache             | `%LOCALAPPDATA%\com.clipcore.desktop\cache`          |
+| Logs              | `%LOCALAPPDATA%\com.clipcore.desktop\logs`           |
+| Atualizações      | `%LOCALAPPDATA%\com.clipcore.desktop\updates`        |
+| Clipes            | `%USERPROFILE%\Videos\ClipCore` (ou pasta escolhida) |
 
 Nada mutável dentro da pasta de instalação. Nenhum clipe dentro dela.
 
@@ -82,10 +82,10 @@ antivírus, desativação de proteções.
 
 ## Sidecars
 
-| Sidecar  | Arquivo empacotado                        | Obrigatório | Licença            |
-| -------- | ----------------------------------------- | ----------- | ------------------ |
-| ffmpeg   | `ffmpeg-x86_64-pc-windows-msvc.exe`       | sim         | LGPL-2.1-or-later  |
-| ffprobe  | `ffprobe-x86_64-pc-windows-msvc.exe`      | sim         | LGPL-2.1-or-later  |
+| Sidecar | Arquivo empacotado                   | Obrigatório | Licença           |
+| ------- | ------------------------------------ | ----------- | ----------------- |
+| ffmpeg  | `ffmpeg-x86_64-pc-windows-msvc.exe`  | sim         | LGPL-2.1-or-later |
+| ffprobe | `ffprobe-x86_64-pc-windows-msvc.exe` | sim         | LGPL-2.1-or-later |
 
 Regras aplicadas (ver `SIDECARS` em `src/lib/distribution.ts` e
 `media/ffmpeg.rs`): nome fixo, caminho resolvido apenas ao lado do executável
@@ -107,16 +107,16 @@ removidos. Vídeos nunca são apagados silenciosamente.
 
 ## Dev vs produção
 
-| Aspecto        | Development                     | Production                        |
-| -------------- | ------------------------------- | --------------------------------- |
-| Mocks          | permitidos                      | proibidos em funções centrais     |
-| Logs           | detalhados                      | reduzidos                         |
-| Assinatura     | ausente                         | obrigatória                       |
-| Updater        | desativado                      | ativo e assinado                  |
-| Sidecars       | podem faltar (flag explícita)   | validados por checksum            |
-| CSP            | permissiva no dev server        | restrita                          |
-| Telemetria     | desligada                       | apenas com consentimento          |
-| Indicação      | banner de desenvolvimento       | rótulo de canal quando não estável|
+| Aspecto    | Development                   | Production                         |
+| ---------- | ----------------------------- | ---------------------------------- |
+| Mocks      | permitidos                    | proibidos em funções centrais      |
+| Logs       | detalhados                    | reduzidos                          |
+| Assinatura | ausente                       | obrigatória                        |
+| Updater    | desativado                    | ativo e assinado                   |
+| Sidecars   | podem faltar (flag explícita) | validados por checksum             |
+| CSP        | permissiva no dev server      | restrita                           |
+| Telemetria | desligada                     | apenas com consentimento           |
+| Indicação  | banner de desenvolvimento     | rótulo de canal quando não estável |
 
 Um build de produção nunca usa dados simulados sem indicação visível: a interface
 mostra "Modo demonstração" no navegador e o rótulo do canal (ex.: `ClipCore Alpha`)

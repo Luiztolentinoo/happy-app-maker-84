@@ -6,15 +6,15 @@ testado.** Nenhuma release não assinada é aceita.
 
 ## Estado atual
 
-| Item                          | Estado                                            |
-| ----------------------------- | ------------------------------------------------- |
-| Plugin instalado              | sim (`tauri-plugin-updater`)                      |
-| Endpoint HTTPS                | `https://updates.clipcore.dev/{{target}}/{{arch}}/{{current_version}}` |
-| `pubkey`                      | placeholder `REPLACE_WITH_TAURI_UPDATER_PUBLIC_KEY` |
-| `active`                      | `false`                                           |
-| Diálogo nativo                | desativado — a UI de `/updates` conduz o fluxo    |
-| Canais                        | development, alpha, beta, stable                  |
-| Auto-update permitido em      | beta e stable (ver `channelAllowsAutoUpdate`)     |
+| Item                     | Estado                                                                 |
+| ------------------------ | ---------------------------------------------------------------------- |
+| Plugin instalado         | sim (`tauri-plugin-updater`)                                           |
+| Endpoint HTTPS           | `https://updates.clipcore.dev/{{target}}/{{arch}}/{{current_version}}` |
+| `pubkey`                 | placeholder `REPLACE_WITH_TAURI_UPDATER_PUBLIC_KEY`                    |
+| `active`                 | `false`                                                                |
+| Diálogo nativo           | desativado — a UI de `/updates` conduz o fluxo                         |
+| Canais                   | development, alpha, beta, stable                                       |
+| Auto-update permitido em | beta e stable (ver `channelAllowsAutoUpdate`)                          |
 
 ## Geração e configuração das chaves
 

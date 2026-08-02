@@ -6,15 +6,15 @@ exigido dele.
 
 ## 1. Requisitos
 
-| Item                          | Versão / observação                                        |
-| ----------------------------- | ---------------------------------------------------------- |
-| Windows                       | 10 64-bit (build suportada) ou 11 64-bit                   |
-| Bun                           | 1.1+ — `powershell -c "irm bun.sh/install.ps1 | iex"`      |
-| Rust                          | stable MSVC — `rustup toolchain install stable-msvc`        |
-| Visual Studio Build Tools     | 2022, workload "Desktop development with C++"              |
-| Windows SDK                   | 10.0.22621 ou superior (Graphics.Capture, Media Foundation) |
-| WebView2 Runtime              | já presente no Windows 11; o instalador embute o bootstrapper |
-| PowerShell 7 (`pwsh`)         | para os scripts de sidecar e artefatos                     |
+| Item                      | Versão / observação                                           |
+| ------------------------- | ------------------------------------------------------------- |
+| Windows                   | 10 64-bit (build suportada) ou 11 64-bit                      |
+| Bun                       | 1.1+ — `powershell -c "irm bun.sh/install.ps1                 | iex"` |
+| Rust                      | stable MSVC — `rustup toolchain install stable-msvc`          |
+| Visual Studio Build Tools | 2022, workload "Desktop development with C++"                 |
+| Windows SDK               | 10.0.22621 ou superior (Graphics.Capture, Media Foundation)   |
+| WebView2 Runtime          | já presente no Windows 11; o instalador embute o bootstrapper |
+| PowerShell 7 (`pwsh`)     | para os scripts de sidecar e artefatos                        |
 
 ## 2. Dependências do projeto
 
@@ -94,13 +94,13 @@ ser publicado. Ver `docs/UPDATER.md` e `docs/CODE_SIGNING.md`.
 
 ## 8. Troubleshooting
 
-| Sintoma                                        | Causa provável / ação                                                    |
-| ---------------------------------------------- | ------------------------------------------------------------------------ |
-| `link.exe not found`                           | Build Tools sem workload C++.                                            |
-| `failed to bundle project: externalBin`        | sidecar ausente — rode `scripts/fetch-ffmpeg.ps1`.                       |
-| `Icon not found`                               | falta `icons/icon.ico` — gere com `bunx tauri icon`.                     |
-| `headerImage` inválido                         | BMP precisa ser 24-bit, 150×57.                                          |
-| NSIS falha em `currentUser`                    | remova instalação anterior por máquina antes de testar por usuário.      |
-| WebView2 ausente em VM limpa                   | esperado: o bootstrapper embutido instala no primeiro run do instalador. |
-| `cargo test` lento na primeira vez             | `rusqlite` com feature `bundled` compila o SQLite.                       |
-| Erro de assinatura ao publicar                 | secrets não configurados — o updater permanece inativo por segurança.    |
+| Sintoma                                 | Causa provável / ação                                                    |
+| --------------------------------------- | ------------------------------------------------------------------------ |
+| `link.exe not found`                    | Build Tools sem workload C++.                                            |
+| `failed to bundle project: externalBin` | sidecar ausente — rode `scripts/fetch-ffmpeg.ps1`.                       |
+| `Icon not found`                        | falta `icons/icon.ico` — gere com `bunx tauri icon`.                     |
+| `headerImage` inválido                  | BMP precisa ser 24-bit, 150×57.                                          |
+| NSIS falha em `currentUser`             | remova instalação anterior por máquina antes de testar por usuário.      |
+| WebView2 ausente em VM limpa            | esperado: o bootstrapper embutido instala no primeiro run do instalador. |
+| `cargo test` lento na primeira vez      | `rusqlite` com feature `bundled` compila o SQLite.                       |
+| Erro de assinatura ao publicar          | secrets não configurados — o updater permanece inativo por segurança.    |

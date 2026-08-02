@@ -66,7 +66,10 @@ describe("identidade do aplicativo", () => {
 describe("instaladores", () => {
   it("gera NSIS e MSI versionados, sem nomes genéricos", () => {
     const names = installerArtifacts().map((a) => a.fileName);
-    expect(names).toEqual([`ClipCore-Setup-${APP_VERSION}-x64.exe`, `ClipCore-${APP_VERSION}-x64.msi`]);
+    expect(names).toEqual([
+      `ClipCore-Setup-${APP_VERSION}-x64.exe`,
+      `ClipCore-${APP_VERSION}-x64.msi`,
+    ]);
     for (const n of names) {
       expect(n).not.toMatch(/^(setup|app|installer)\.exe$/i);
       expect(n).toContain(APP_VERSION);
@@ -112,7 +115,9 @@ describe("sidecars", () => {
 
   it("aceita apenas argumentos declarados", () => {
     expect(isAllowedSidecarInvocation("ffmpeg", ["-version"])).toBe(true);
-    expect(isAllowedSidecarInvocation("ffmpeg", ["-i", "in.mp4", "-c", "copy", "out.mp4"])).toBe(true);
+    expect(isAllowedSidecarInvocation("ffmpeg", ["-i", "in.mp4", "-c", "copy", "out.mp4"])).toBe(
+      true,
+    );
     expect(isAllowedSidecarInvocation("ffmpeg", ["--exec", "calc.exe"])).toBe(false);
     expect(isAllowedSidecarInvocation("ffprobe", ["-show_format", "-i", "a.mp4"])).toBe(true);
     expect(isAllowedSidecarInvocation("desconhecido", ["-version"])).toBe(false);
@@ -140,7 +145,15 @@ describe("checksums", () => {
 
 describe("caminhos", () => {
   it("dados mutáveis ficam fora do diretório de instalação", () => {
-    for (const key of ["config", "data", "cache", "logs", "database", "clips", "updateStaging"] as const) {
+    for (const key of [
+      "config",
+      "data",
+      "cache",
+      "logs",
+      "database",
+      "clips",
+      "updateStaging",
+    ] as const) {
       expect(WINDOWS_PATHS[key]).not.toContain("Programs\\ClipCore");
       expect(WINDOWS_PATHS[key]).not.toContain("PROGRAMFILES");
     }

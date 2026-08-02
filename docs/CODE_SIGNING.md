@@ -6,10 +6,10 @@ quando os secrets existirem — nada é desativado para "contornar" avisos.
 
 ## Tipos de certificado
 
-| Tipo | Reputação SmartScreen                  | Armazenamento           | Custo/atrito |
-| ---- | -------------------------------------- | ----------------------- | ------------ |
-| OV   | construída ao longo do tempo/downloads | HSM/token (desde 2023)  | menor        |
-| EV   | reputação imediata na maioria dos casos| token de hardware/HSM   | maior        |
+| Tipo | Reputação SmartScreen                   | Armazenamento          | Custo/atrito |
+| ---- | --------------------------------------- | ---------------------- | ------------ |
+| OV   | construída ao longo do tempo/downloads  | HSM/token (desde 2023) | menor        |
+| EV   | reputação imediata na maioria dos casos | token de hardware/HSM  | maior        |
 
 Desde junho de 2023 a Microsoft exige que a chave privada de certificados de
 assinatura de código fique em HSM/token certificado FIPS. Provedores oferecem
@@ -26,11 +26,11 @@ SSL.com eSigner) — é a via prática para CI.
 
 ## Secrets esperados no CI
 
-| Secret                          | Conteúdo                                          |
-| ------------------------------- | ------------------------------------------------- |
-| `WINDOWS_CERTIFICATE`           | PFX em base64 **ou** credenciais do assinador em nuvem |
-| `WINDOWS_CERTIFICATE_PASSWORD`  | senha do PFX                                      |
-| `WINDOWS_TIMESTAMP_URL`         | ex.: `http://timestamp.digicert.com`              |
+| Secret                         | Conteúdo                                               |
+| ------------------------------ | ------------------------------------------------------ |
+| `WINDOWS_CERTIFICATE`          | PFX em base64 **ou** credenciais do assinador em nuvem |
+| `WINDOWS_CERTIFICATE_PASSWORD` | senha do PFX                                           |
+| `WINDOWS_TIMESTAMP_URL`        | ex.: `http://timestamp.digicert.com`                   |
 
 O workflow de release detecta a presença dos secrets. Sem eles, o build continua
 e os artefatos são marcados como **não assinados**.

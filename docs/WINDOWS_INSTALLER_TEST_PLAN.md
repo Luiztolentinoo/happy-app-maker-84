@@ -8,14 +8,14 @@ Legenda: `[ ]` pendente · `[x]` validado · `[!]` falhou
 
 ## 1. Ambientes
 
-| ID   | Sistema                      | Perfil                        |
-| ---- | ---------------------------- | ----------------------------- |
-| E1   | Windows 11 24H2 x64          | usuário padrão (sem admin)    |
-| E2   | Windows 10 22H2 x64          | usuário padrão                |
-| E3   | Windows 11 x64               | administrador (MSI)           |
-| E4   | Windows 11 x64, VM limpa     | sem WebView2                  |
-| E5   | Windows 11 x64               | usuário `Índio Ç Ünïcode`     |
-| E6   | Windows 11 x64               | disco com < 1 GB livre        |
+| ID  | Sistema                  | Perfil                     |
+| --- | ------------------------ | -------------------------- |
+| E1  | Windows 11 24H2 x64      | usuário padrão (sem admin) |
+| E2  | Windows 10 22H2 x64      | usuário padrão             |
+| E3  | Windows 11 x64           | administrador (MSI)        |
+| E4  | Windows 11 x64, VM limpa | sem WebView2               |
+| E5  | Windows 11 x64           | usuário `Índio Ç Ünïcode`  |
+| E6  | Windows 11 x64           | disco com < 1 GB livre     |
 
 ## 2. Instalação limpa (NSIS)
 
