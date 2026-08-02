@@ -52,7 +52,6 @@ export function MediaPlayer({
         />
         <div className="relative">
           {src ? (
-            // eslint-disable-next-line jsx-a11y/media-has-caption
             <video
               ref={video}
               src={src}

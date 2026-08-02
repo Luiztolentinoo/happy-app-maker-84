@@ -285,7 +285,6 @@ function LibraryPage() {
             ))
           )}
 
-
           {trash.length > 0 ? (
             <Module icon={Trash2} title="Lixeira">
               <ul className="space-y-2">
@@ -334,7 +333,6 @@ function LibraryPage() {
               onChange={(e) => pickLocalFile(e.target.files?.[0])}
             />
           </Module>
-
         </aside>
       </div>
     </AppShell>

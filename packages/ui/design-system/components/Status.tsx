@@ -75,7 +75,13 @@ export function StatusIndicator({
 
   if (variant === "inline") {
     return (
-      <span className={cn("inline-flex items-center gap-2 text-sm", toneClass[config.tone].split(" ")[0], className)}>
+      <span
+        className={cn(
+          "inline-flex items-center gap-2 text-sm",
+          toneClass[config.tone].split(" ")[0],
+          className,
+        )}
+      >
         <Icon icon={config.icon} size="sm" className={config.spin ? "animate-spin" : undefined} />
         {text}
       </span>

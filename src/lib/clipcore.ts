@@ -9,15 +9,8 @@ export const APP_NAME = "ClipCore";
 export const isDemoMode = isDemoRuntime;
 export const isNativeMode = isDesktopRuntime;
 
-
 export type CaptureState =
-  | "idle"
-  | "detecting"
-  | "buffering"
-  | "recording_session"
-  | "saving_clip"
-  | "degraded"
-  | "error";
+  "idle" | "detecting" | "buffering" | "recording_session" | "saving_clip" | "degraded" | "error";
 
 export type ClipType = "retroactive" | "session" | "screenshot" | "export";
 
@@ -153,12 +146,44 @@ export interface DiagnosticResult {
 
 export function runDemoDiagnostics(): DiagnosticResult[] {
   return [
-    { id: "engine", label: "Motor de captura", status: "warn", detail: "Simulado — requer build Windows/Tauri.", fix: "Compile o projeto desktop no Windows." },
-    { id: "encoder", label: "Encoder de hardware", status: "warn", detail: "Não detectável no navegador.", fix: "Execute o diagnóstico nativo." },
-    { id: "audio", label: "Dispositivos de áudio", status: "pass", detail: "API de mídia disponível." },
-    { id: "hotkeys", label: "Atalhos globais", status: "warn", detail: "Atalhos globais exigem camada nativa." },
-    { id: "storage", label: "Escrita em disco", status: "pass", detail: "Persistência local disponível." },
-    { id: "player", label: "Reprodução de vídeo", status: "pass", detail: "Decodificação MP4/H.264 disponível." },
+    {
+      id: "engine",
+      label: "Motor de captura",
+      status: "warn",
+      detail: "Simulado — requer build Windows/Tauri.",
+      fix: "Compile o projeto desktop no Windows.",
+    },
+    {
+      id: "encoder",
+      label: "Encoder de hardware",
+      status: "warn",
+      detail: "Não detectável no navegador.",
+      fix: "Execute o diagnóstico nativo.",
+    },
+    {
+      id: "audio",
+      label: "Dispositivos de áudio",
+      status: "pass",
+      detail: "API de mídia disponível.",
+    },
+    {
+      id: "hotkeys",
+      label: "Atalhos globais",
+      status: "warn",
+      detail: "Atalhos globais exigem camada nativa.",
+    },
+    {
+      id: "storage",
+      label: "Escrita em disco",
+      status: "pass",
+      detail: "Persistência local disponível.",
+    },
+    {
+      id: "player",
+      label: "Reprodução de vídeo",
+      status: "pass",
+      detail: "Decodificação MP4/H.264 disponível.",
+    },
     { id: "network", label: "Rede", status: "pass", detail: "Conexão ativa." },
   ];
 }

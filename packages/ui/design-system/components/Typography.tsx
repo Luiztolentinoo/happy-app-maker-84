@@ -29,7 +29,8 @@ export function Text({
   className?: string | undefined;
   children: ReactNode;
 }) {
-  const Component = (as ?? (variant === "hero" ? "h1" : variant === "title" ? "h2" : "p")) as ElementType;
+  const Component = (as ??
+    (variant === "hero" ? "h1" : variant === "title" ? "h2" : "p")) as ElementType;
   return <Component className={cn(textStyles[variant], className)}>{children}</Component>;
 }
 

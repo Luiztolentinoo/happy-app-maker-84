@@ -46,10 +46,7 @@ export function Field({
 const CONTROL =
   "border-border-primary bg-surface-primary/60 text-ink placeholder:text-ink-muted focus-visible:border-border-glow";
 
-export function TextInput({
-  className,
-  ...props
-}: React.ComponentProps<typeof BaseInput>) {
+export function TextInput({ className, ...props }: React.ComponentProps<typeof BaseInput>) {
   return <BaseInput className={cn(CONTROL, className)} {...props} />;
 }
 
@@ -122,7 +119,14 @@ export function SliderField({
   onChange: (value: number) => void;
 }) {
   return (
-    <Field label={label} action={<span className="font-mono text-xs text-ink-secondary">{format ? format(value) : value}</span>}>
+    <Field
+      label={label}
+      action={
+        <span className="font-mono text-xs text-ink-secondary">
+          {format ? format(value) : value}
+        </span>
+      }
+    >
       <Slider
         value={[value]}
         min={min}
@@ -169,7 +173,6 @@ export function HotkeyInput({
     </button>
   );
 }
-
 
 export { Label, Switch, Slider };
 

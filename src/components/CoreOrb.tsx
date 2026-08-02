@@ -27,11 +27,6 @@ export function CoreOrb({
   caption?: string;
 }) {
   return (
-    <DSCoreOrb
-      state={tone}
-      burstKey={burstKey}
-      size={size}
-      {...(caption ? { caption } : {})}
-    />
+    <DSCoreOrb state={tone} burstKey={burstKey} size={size} {...(caption ? { caption } : {})} />
   );
 }
