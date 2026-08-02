@@ -59,6 +59,25 @@ function DemoNotice() {
   );
 }
 
+function SoundToggle() {
+  const { enabled, toggle } = useSound();
+  return (
+    <DSTooltip
+      side="bottom"
+      content={enabled ? "Feedback sonoro ativo" : "Feedback sonoro desativado"}
+    >
+      <Button
+        variant="icon"
+        size="iconSm"
+        icon={enabled ? Volume2 : VolumeX}
+        onClick={toggle}
+        aria-pressed={enabled}
+        aria-label="Alternar feedback sonoro"
+      />
+    </DSTooltip>
+  );
+}
+
 export function AppShell({
   title,
   subtitle,
@@ -70,24 +89,43 @@ export function AppShell({
   actions?: ReactNode;
   children: ReactNode;
 }) {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isLoading = useRouterState({ select: (state) => state.status === "pending" });
+  const { play } = useSound();
+
   return (
     <div className="flex min-h-screen">
-      <Sidebar items={NAV} brand={<Brand />} footer={<DemoNotice />} />
+      <Sidebar
+        items={NAV}
+        brand={<Brand />}
+        footer={<DemoNotice />}
+        onNavHover={() => play("hover")}
+      />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar
           title={title}
+          loading={isLoading}
           {...(subtitle ? { subtitle } : {})}
           actions={
             <>
               {actions}
               {isDemoMode() ? <Badge tone="yellow">demo</Badge> : null}
+              <SoundToggle />
             </>
           }
         />
-        <main className="flex-1 px-6 py-8 pb-24 md:px-10 lg:pb-8">{children}</main>
+        <main
+          className={cn(
+            "ds-scroll flex-1 px-6 py-8 pb-24 transition-[filter,opacity] duration-300 md:px-10 lg:pb-8",
+            isLoading && "pointer-events-none opacity-70 blur-[3px]",
+          )}
+        >
+          <RouteTransition routeKey={pathname}>{children}</RouteTransition>
+        </main>
         <MobileNav items={MOBILE_NAV} />
       </div>
     </div>
   );
 }
+
