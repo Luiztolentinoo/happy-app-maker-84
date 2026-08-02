@@ -58,7 +58,10 @@ export const captureService = {
   getStatus: () => nativeInvoke<CaptureStatus>("get_capture_state", undefined, demoStatus),
   startBuffer: () => nativeInvoke<CaptureStatus>("start_buffer", undefined, demoStatus),
   stopBuffer: () =>
-    nativeInvoke<CaptureStatus>("stop_buffer", undefined, () => ({ ...demoStatus(), state: "idle" })),
+    nativeInvoke<CaptureStatus>("stop_buffer", undefined, () => ({
+      ...demoStatus(),
+      state: "idle",
+    })),
   saveRetroactiveClip: (seconds: number, title?: string, game?: string) =>
     nativeInvoke<unknown>("save_retroactive_clip", { args: { seconds, title, game } }),
   startSession: () => nativeInvoke<CaptureStatus>("start_session_recording"),

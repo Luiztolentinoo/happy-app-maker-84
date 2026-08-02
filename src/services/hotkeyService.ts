@@ -24,7 +24,13 @@ export const DEFAULT_HOTKEYS: NativeHotkeyBinding[] = [
   { action: "toggle_overlay", combo: "Shift+F8", enabled: true, profile_id: null },
 ];
 
-export const RESERVED_COMBOS = ["Ctrl+Alt+Delete", "Ctrl+Shift+Escape", "Alt+Tab", "Alt+F4", "Super+L"];
+export const RESERVED_COMBOS = [
+  "Ctrl+Alt+Delete",
+  "Ctrl+Shift+Escape",
+  "Alt+Tab",
+  "Alt+F4",
+  "Super+L",
+];
 
 const normalize = (combo: string) => combo.replace(/\s+/g, "").toLowerCase();
 

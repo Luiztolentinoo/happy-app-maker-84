@@ -88,7 +88,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "ClipCore — Clipagem de jogos local e leve" },
       {
         property: "og:description",
-        content: "Capture seus melhores momentos sem perder FPS, sem bagunça e sem depender da nuvem.",
+        content:
+          "Capture seus melhores momentos sem perder FPS, sem bagunça e sem depender da nuvem.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

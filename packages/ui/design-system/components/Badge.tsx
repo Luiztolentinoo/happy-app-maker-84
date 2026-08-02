@@ -82,5 +82,9 @@ export function Chip({
   className?: string | undefined;
   children: ReactNode;
 }) {
-  return <Badge tone={tone} className={cn("normal-case tracking-normal", className)}>{children}</Badge>;
+  return (
+    <Badge tone={tone} className={cn("normal-case tracking-normal", className)}>
+      {children}
+    </Badge>
+  );
 }

@@ -49,7 +49,18 @@ export type DSButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   };
 
 export const Button = forwardRef<HTMLButtonElement, DSButtonProps>(function Button(
-  { className, variant, size, icon, trailingIcon, iconSize = "sm", ripple = true, children, onClick, ...props },
+  {
+    className,
+    variant,
+    size,
+    icon,
+    trailingIcon,
+    iconSize = "sm",
+    ripple = true,
+    children,
+    onClick,
+    ...props
+  },
   ref,
 ) {
   const [wave, setWave] = useState(0);

@@ -3,13 +3,7 @@ import { cn } from "@/lib/utils";
 import { type Tone, toneVar } from "../tokens";
 import { animations } from "../animations";
 
-export type OrbState =
-  | "idle"
-  | "buffering"
-  | "recording"
-  | "saving"
-  | "warning"
-  | "error";
+export type OrbState = "idle" | "buffering" | "recording" | "saving" | "warning" | "error";
 
 export const orbStateConfig: Record<OrbState, { tone: Tone; label: string }> = {
   idle: { tone: "blue", label: "Aguardando" },

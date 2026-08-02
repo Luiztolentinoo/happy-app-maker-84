@@ -25,12 +25,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const OVERLAY_SURFACE = "glass-strong border-border-primary text-ink";
 
@@ -55,10 +50,7 @@ export function DSDialog({
   children?: ReactNode | undefined;
 }) {
   return (
-    <Dialog
-      {...(open === undefined ? {} : { open })}
-      {...(onOpenChange ? { onOpenChange } : {})}
-    >
+    <Dialog {...(open === undefined ? {} : { open })} {...(onOpenChange ? { onOpenChange } : {})}>
       {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
       <DialogContent className={cn(OVERLAY_SURFACE, className)}>
         <DialogHeader>

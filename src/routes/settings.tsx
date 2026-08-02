@@ -55,8 +55,18 @@ const CATEGORIES = [
     icon: SlidersHorizontal,
     keywords: "buffer resolução fps codec bitrate qualidade",
   },
-  { id: "audio", label: "Áudio e overlay", icon: Volume2, keywords: "microfone som overlay telemetria" },
-  { id: "storage", label: "Armazenamento", icon: HardDrive, keywords: "pasta disco limite gb exclusão" },
+  {
+    id: "audio",
+    label: "Áudio e overlay",
+    icon: Volume2,
+    keywords: "microfone som overlay telemetria",
+  },
+  {
+    id: "storage",
+    label: "Armazenamento",
+    icon: HardDrive,
+    keywords: "pasta disco limite gb exclusão",
+  },
 ] as const;
 
 function SettingsPage() {
@@ -129,21 +139,23 @@ function SettingsPage() {
             />
           </div>
           <nav className="flex flex-col gap-1.5">
-            {CATEGORIES.filter((c) => matches.includes(c.id)).map(({ id, label, icon: ItemIcon }) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setCategory(id)}
-                className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-medium transition-all duration-200 ${
-                  shown === id
-                    ? "bg-surface-tertiary text-ink shadow-glow-purple-sm"
-                    : "text-ink-secondary hover:bg-surface-hover hover:text-ink"
-                }`}
-              >
-                <Icon icon={ItemIcon} size="sm" className="shrink-0 text-accent-purple" />
-                {label}
-              </button>
-            ))}
+            {CATEGORIES.filter((c) => matches.includes(c.id)).map(
+              ({ id, label, icon: ItemIcon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setCategory(id)}
+                  className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-left text-sm font-medium transition-all duration-200 ${
+                    shown === id
+                      ? "bg-surface-tertiary text-ink shadow-glow-purple-sm"
+                      : "text-ink-secondary hover:bg-surface-hover hover:text-ink"
+                  }`}
+                >
+                  <Icon icon={ItemIcon} size="sm" className="shrink-0 text-accent-purple" />
+                  {label}
+                </button>
+              ),
+            )}
           </nav>
           <DSButton
             variant="ghost"

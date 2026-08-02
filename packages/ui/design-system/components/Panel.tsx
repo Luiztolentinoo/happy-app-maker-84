@@ -50,7 +50,15 @@ export function Module({
   children: ReactNode;
 }) {
   return (
-    <section className={cn(glass[level], animations.cardHover, animations.slide, "relative overflow-hidden p-6", className)}>
+    <section
+      className={cn(
+        glass[level],
+        animations.cardHover,
+        animations.slide,
+        "relative overflow-hidden p-6",
+        className,
+      )}
+    >
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-purple/55 to-transparent"

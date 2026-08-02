@@ -17,7 +17,10 @@ export function Loading({
 }) {
   const map = { sm: "size-4", md: "size-6", lg: "size-8" } as const;
   return (
-    <div className={cn("flex flex-col items-center justify-center gap-3 py-10", className)} role="status">
+    <div
+      className={cn("flex flex-col items-center justify-center gap-3 py-10", className)}
+      role="status"
+    >
       <Loader2 className={cn(map[size], "animate-spin text-accent-purple")} aria-hidden />
       <p className="text-sm text-ink-muted">{label}</p>
     </div>
@@ -71,7 +74,12 @@ export function EmptyState({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("flex flex-col items-center justify-center gap-3 px-6 py-14 text-center", className)}>
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center gap-3 px-6 py-14 text-center",
+        className,
+      )}
+    >
       <span className="grid size-12 place-items-center rounded-full border border-border-primary bg-surface-primary/60">
         <Icon icon={icon} size="md" tone="muted" />
       </span>
@@ -97,7 +105,13 @@ export function ErrorState({
   className?: string | undefined;
 }) {
   return (
-    <div className={cn("flex flex-col items-center justify-center gap-3 px-6 py-14 text-center", className)} role="alert">
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center gap-3 px-6 py-14 text-center",
+        className,
+      )}
+      role="alert"
+    >
       <span className="grid size-12 place-items-center rounded-full border border-accent-red/40 bg-accent-red/10">
         <Icon icon={AlertTriangle} size="md" tone="red" />
       </span>

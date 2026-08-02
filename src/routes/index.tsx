@@ -41,7 +41,8 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "ClipCore — Centro de comando de captura" },
       {
         property: "og:description",
-        content: "Capture seus melhores momentos sem perder FPS, sem bagunça e sem depender da nuvem.",
+        content:
+          "Capture seus melhores momentos sem perder FPS, sem bagunça e sem depender da nuvem.",
       },
     ],
   }),
@@ -106,11 +107,7 @@ function Dashboard() {
       <AppShell
         title="Centro de comando"
         subtitle={`${APP_NAME} — motor de captura, hardware e clipes recentes`}
-        actions={
-          <Badge tone={state === "error" ? "red" : "green"}>
-            {STATE_LABEL[state]}
-          </Badge>
-        }
+        actions={<Badge tone={state === "error" ? "red" : "green"}>{STATE_LABEL[state]}</Badge>}
       >
         <div className="grid gap-6 xl:grid-cols-3">
           <Module className="glow xl:col-span-2" icon={Activity} title="Motor de captura">

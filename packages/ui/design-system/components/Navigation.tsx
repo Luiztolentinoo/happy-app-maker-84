@@ -47,7 +47,11 @@ export function Sidebar({
                   "bg-surface-secondary/90 text-ink glow-purple before:absolute before:left-0 before:top-1/2 before:h-7 before:w-[3px] before:-translate-y-1/2 before:rounded-r-full before:bg-accent-purple",
               }}
             >
-              <Icon icon={item.icon} size="md" className="transition-colors duration-200 group-hover:text-accent-purple" />
+              <Icon
+                icon={item.icon}
+                size="md"
+                className="transition-colors duration-200 group-hover:text-accent-purple"
+              />
               {collapsed ? null : <span className="truncate">{item.label}</span>}
             </Link>
           </DSTooltip>

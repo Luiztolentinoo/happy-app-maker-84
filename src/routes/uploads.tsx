@@ -41,10 +41,7 @@ const LABEL = {
 
 function UploadsPage() {
   const { clips } = useClips();
-  const pending = useMemo(
-    () => clips.filter((c) => c.uploadStatus !== "local").length,
-    [clips],
-  );
+  const pending = useMemo(() => clips.filter((c) => c.uploadStatus !== "local").length, [clips]);
 
   return (
     <AppShell

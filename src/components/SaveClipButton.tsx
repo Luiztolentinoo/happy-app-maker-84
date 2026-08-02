@@ -12,6 +12,11 @@ export function SaveClipButton({
   hotkey: string;
 }) {
   return (
-    <CaptureButton icon={Save} onClick={onClick} hotkey={hotkey} {...(disabled ? { disabled } : {})} />
+    <CaptureButton
+      icon={Save}
+      onClick={onClick}
+      hotkey={hotkey}
+      {...(disabled ? { disabled } : {})}
+    />
   );
 }

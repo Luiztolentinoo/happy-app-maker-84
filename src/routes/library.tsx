@@ -19,6 +19,7 @@ import {
   Badge,
   Chip,
   MediaCard,
+  MediaPlayer,
   EmptyState,
   SkeletonMedia,
   Button as DSButton,
@@ -284,7 +285,6 @@ function LibraryPage() {
             ))
           )}
 
-
           {trash.length > 0 ? (
             <Module icon={Trash2} title="Lixeira">
               <ul className="space-y-2">
@@ -306,65 +306,25 @@ function LibraryPage() {
 
         <aside className="h-fit space-y-6 2xl:sticky 2xl:top-32">
           <Module icon={Play} title="Player">
-            <div className="relative overflow-hidden rounded-xl border border-border">
-              <div
-                className="absolute inset-0 scale-110 blur-2xl"
-                style={{
-                  background: `linear-gradient(140deg, ${active?.accent ?? "oklch(0.3 0.03 264)"} 0%, oklch(0.16 0.02 265) 85%)`,
-                  opacity: 0.7,
-                }}
-              />
-              <div className="relative">
-                {localSrc ? (
-                  // eslint-disable-next-line jsx-a11y/media-has-caption
-                  <video src={localSrc} controls className="aspect-video w-full bg-black" />
-                ) : (
-                  <div className="grid aspect-video place-items-center p-5 text-center text-xs text-foreground/70">
-                    Miniatura simulada — abra um arquivo de vídeo local para reproduzir.
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {!localSrc ? (
-              <div className="mt-4">
-                <div className="group relative h-2.5 cursor-pointer overflow-hidden rounded-full bg-background/70">
-                  <div
-                    className="h-full rounded-full transition-[width] duration-300"
-                    style={{
-                      width: "38%",
-                      background: "linear-gradient(90deg, var(--primary), var(--electric))",
-                      boxShadow: "0 0 16px -2px var(--primary)",
-                    }}
-                  />
-                  <div className="pointer-events-none absolute inset-y-0 left-[38%] w-px bg-foreground/70" />
-                </div>
-                <div className="mt-2 flex justify-between font-mono text-[11px] text-muted-foreground">
-                  <span>00:11</span>
-                  <span>{active ? formatDuration(active.durationMs) : "00:00"}</span>
-                </div>
-              </div>
-            ) : null}
-
-            <p className="mt-4 truncate text-sm font-semibold">
-              {localName ?? active?.title ?? "Nenhum clipe selecionado"}
-            </p>
-            {active && !localName ? (
-              <dl className="mt-3 grid grid-cols-2 gap-y-1.5 text-xs text-muted-foreground">
-                <dt>Jogo</dt>
-                <dd className="text-right text-foreground">{active.game}</dd>
-                <dt>Duração</dt>
-                <dd className="text-right text-foreground">{formatDuration(active.durationMs)}</dd>
-                <dt>Resolução</dt>
-                <dd className="text-right text-foreground">
-                  {active.width}×{active.height}
-                </dd>
-                <dt>Codec</dt>
-                <dd className="text-right text-foreground">{active.codec}</dd>
-                <dt>Tamanho</dt>
-                <dd className="text-right text-foreground">{formatBytes(active.fileSize)}</dd>
-              </dl>
-            ) : null}
+            <MediaPlayer
+              title={localName ?? active?.title ?? "Nenhum clipe selecionado"}
+              {...(localSrc ? { src: localSrc } : {})}
+              {...(active?.accent ? { accent: active.accent } : {})}
+              positionLabel="00:11"
+              durationLabel={active ? formatDuration(active.durationMs) : "00:00"}
+              {...(active && !localName
+                ? {
+                    meta: [
+                      { label: "Jogo", value: active.game },
+                      { label: "Duração", value: formatDuration(active.durationMs) },
+                      { label: "Resolução", value: `${active.width}×${active.height}` },
+                      { label: "Codec", value: active.codec },
+                      { label: "Tamanho", value: formatBytes(active.fileSize) },
+                    ],
+                  }
+                : {})}
+              onOpenLocal={() => fileInput.current?.click()}
+            />
             <input
               ref={fileInput}
               type="file"
@@ -372,13 +332,6 @@ function LibraryPage() {
               className="hidden"
               onChange={(e) => pickLocalFile(e.target.files?.[0])}
             />
-            <Button
-              variant="outline"
-              className="mt-5 w-full"
-              onClick={() => fileInput.current?.click()}
-            >
-              <FolderOpen /> Abrir vídeo local
-            </Button>
           </Module>
         </aside>
       </div>

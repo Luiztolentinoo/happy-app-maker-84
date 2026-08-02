@@ -58,9 +58,12 @@ export function useSettings() {
     localStorage.setItem(KEY, JSON.stringify(settings));
   }, [settings, ready]);
 
-  const update = useCallback(<K extends keyof ClipcoreSettings>(key: K, value: ClipcoreSettings[K]) => {
-    setSettings((prev) => ({ ...prev, [key]: value }));
-  }, []);
+  const update = useCallback(
+    <K extends keyof ClipcoreSettings>(key: K, value: ClipcoreSettings[K]) => {
+      setSettings((prev) => ({ ...prev, [key]: value }));
+    },
+    [],
+  );
 
   const reset = useCallback(() => setSettings(DEFAULT_SETTINGS), []);
 
