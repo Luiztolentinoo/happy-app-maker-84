@@ -4,6 +4,7 @@ import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Icon } from "./Icon";
 import { DSTooltip } from "./Overlay";
+import { TopProgress } from "./Motion";
 
 export type NavItem = {
   to: string;
@@ -19,12 +20,14 @@ export function Sidebar({
   footer,
   collapsed = false,
   className,
+  onNavHover,
 }: {
   items: NavItem[];
   brand?: ReactNode | undefined;
   footer?: ReactNode | undefined;
   collapsed?: boolean | undefined;
   className?: string | undefined;
+  onNavHover?: (() => void) | undefined;
 }) {
   return (
     <aside
@@ -41,7 +44,9 @@ export function Sidebar({
             <Link
               to={item.to}
               activeOptions={{ exact: item.to === "/" }}
-              className="group relative flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-ink-secondary transition-all duration-200 hover:translate-x-0.5 hover:bg-surface-secondary/70 hover:text-ink"
+              preload="intent"
+              onPointerEnter={onNavHover}
+              className="group relative flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium text-ink-secondary transition-all duration-[260ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:translate-x-1 hover:bg-surface-secondary/70 hover:text-ink active:scale-[0.985]"
               activeProps={{
                 className:
                   "bg-surface-secondary/90 text-ink glow-purple before:absolute before:left-0 before:top-1/2 before:h-7 before:w-[3px] before:-translate-y-1/2 before:rounded-r-full before:bg-accent-purple",
@@ -50,7 +55,7 @@ export function Sidebar({
               <Icon
                 icon={item.icon}
                 size="md"
-                className="transition-colors duration-200 group-hover:text-accent-purple"
+                className="transition-all duration-[260ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 group-hover:text-accent-purple group-hover:drop-shadow-[0_0_10px_var(--accent-purple)]"
               />
               {collapsed ? null : <span className="truncate">{item.label}</span>}
             </Link>
@@ -77,7 +82,8 @@ export function MobileNav({ items, className }: { items: NavItem[]; className?: 
           key={item.to}
           to={item.to}
           activeOptions={{ exact: item.to === "/" }}
-          className="flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-lg py-1 text-[11px] text-ink-muted transition-colors"
+          preload="intent"
+          className="flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-lg py-1 text-[11px] text-ink-muted transition-all duration-200 active:scale-95"
           activeProps={{ className: "text-accent-purple" }}
         >
           <Icon icon={item.icon} size="md" />
@@ -94,11 +100,13 @@ export function Topbar({
   subtitle,
   actions,
   className,
+  loading = false,
 }: {
   title: string;
   subtitle?: string | undefined;
   actions?: ReactNode | undefined;
   className?: string | undefined;
+  loading?: boolean | undefined;
 }) {
   return (
     <header
@@ -112,6 +120,7 @@ export function Topbar({
         {subtitle ? <p className="truncate text-xs text-ink-muted">{subtitle}</p> : null}
       </div>
       {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
+      <TopProgress active={loading} />
     </header>
   );
 }
