@@ -200,8 +200,12 @@ function LibraryPage() {
                   {group} · {items.length}
                 </h2>
                 <ul className="grid gap-5 sm:grid-cols-2 2xl:grid-cols-3">
-                  {items.map((clip) => (
-                    <li key={clip.id}>
+                  {items.map((clip, index) => (
+                    <li
+                      key={clip.id}
+                      className="animate-ds-slide"
+                      style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
+                    >
                       <MediaCard
                         title={clip.title}
                         meta={`${clip.game} · ${formatDateTime(clip.capturedAt)} · ${formatBytes(clip.fileSize)}`}

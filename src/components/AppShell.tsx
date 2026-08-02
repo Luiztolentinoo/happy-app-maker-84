@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import {
   LayoutDashboard,
@@ -11,9 +11,23 @@ import {
   Settings,
   UserRound,
   Radio,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { APP_NAME, isDemoMode } from "@/lib/clipcore";
-import { Badge, Icon, MobileNav, Sidebar, Topbar, type NavItem } from "@ds";
+import { useSound } from "@/lib/sound";
+import { cn } from "@/lib/utils";
+import {
+  Badge,
+  Button,
+  DSTooltip,
+  Icon,
+  MobileNav,
+  RouteTransition,
+  Sidebar,
+  Topbar,
+  type NavItem,
+} from "@ds";
 
 /** Fonte única de navegação — sidebar e navegação móvel derivam desta lista. */
 const NAV: NavItem[] = [
@@ -59,6 +73,25 @@ function DemoNotice() {
   );
 }
 
+function SoundToggle() {
+  const { enabled, toggle } = useSound();
+  return (
+    <DSTooltip
+      side="bottom"
+      content={enabled ? "Feedback sonoro ativo" : "Feedback sonoro desativado"}
+    >
+      <Button
+        variant="icon"
+        size="iconSm"
+        icon={enabled ? Volume2 : VolumeX}
+        onClick={toggle}
+        aria-pressed={enabled}
+        aria-label="Alternar feedback sonoro"
+      />
+    </DSTooltip>
+  );
+}
+
 export function AppShell({
   title,
   subtitle,
@@ -70,22 +103,40 @@ export function AppShell({
   actions?: ReactNode;
   children: ReactNode;
 }) {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isLoading = useRouterState({ select: (state) => state.isLoading || state.isTransitioning });
+  const { play } = useSound();
+
   return (
     <div className="flex min-h-screen">
-      <Sidebar items={NAV} brand={<Brand />} footer={<DemoNotice />} />
+      <Sidebar
+        items={NAV}
+        brand={<Brand />}
+        footer={<DemoNotice />}
+        onNavHover={() => play("hover")}
+      />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar
           title={title}
+          loading={isLoading}
           {...(subtitle ? { subtitle } : {})}
           actions={
             <>
               {actions}
               {isDemoMode() ? <Badge tone="yellow">demo</Badge> : null}
+              <SoundToggle />
             </>
           }
         />
-        <main className="flex-1 px-6 py-8 pb-24 md:px-10 lg:pb-8">{children}</main>
+        <main
+          className={cn(
+            "ds-scroll flex-1 px-6 py-8 pb-24 transition-[filter,opacity] duration-300 md:px-10 lg:pb-8",
+            isLoading && "opacity-70 blur-[3px]",
+          )}
+        >
+          <RouteTransition routeKey={pathname}>{children}</RouteTransition>
+        </main>
         <MobileNav items={MOBILE_NAV} />
       </div>
     </div>

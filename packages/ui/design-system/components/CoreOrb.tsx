@@ -60,7 +60,19 @@ export function CoreOrb({
       role="status"
       aria-live="polite"
     >
-      <div className="relative grid place-items-center" style={{ width: size, height: size }}>
+      <div
+        className={cn("relative grid place-items-center", animations.orbDrift)}
+        style={{ width: size, height: size }}
+      >
+        <div
+          aria-hidden
+          className={cn("absolute inset-0 rounded-full", animations.orbRing)}
+          style={{
+            background: `conic-gradient(from 0deg, transparent 0deg, ${color} 70deg, transparent 150deg, ${color} 250deg, transparent 330deg)`,
+            opacity: 0.16 * intensity,
+            mask: "radial-gradient(circle, transparent 66%, black 68%, black 74%, transparent 76%)",
+          }}
+        />
         <div
           aria-hidden
           className="absolute inset-0 rounded-full blur-2xl"

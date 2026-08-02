@@ -19,3 +19,4 @@ export * from "./components/CoreOrb";
 export * from "./components/Feedback";
 export * from "./components/Overlay";
 export * from "./components/Navigation";
+export * from "./components/Motion";

@@ -32,7 +32,7 @@ export function Skeleton({ className }: { className?: string }) {
   return (
     <div
       aria-hidden
-      className={cn("rounded-lg bg-surface-secondary/70", animations.pulse, className)}
+      className={cn("rounded-lg bg-surface-secondary/70", animations.shimmer, className)}
     />
   );
 }

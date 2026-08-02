@@ -52,7 +52,7 @@ export function DSDialog({
   return (
     <Dialog {...(open === undefined ? {} : { open })} {...(onOpenChange ? { onOpenChange } : {})}>
       {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-      <DialogContent className={cn(OVERLAY_SURFACE, className)}>
+      <DialogContent className={cn(OVERLAY_SURFACE, "duration-300 sm:rounded-2xl", className)}>
         <DialogHeader>
           <DialogTitle className="font-display">{title}</DialogTitle>
           {description ? <DialogDescription>{description}</DialogDescription> : null}
@@ -84,14 +84,21 @@ export function DSDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent className={OVERLAY_SURFACE} align="end">
+      <DropdownMenuContent
+        className={cn(OVERLAY_SURFACE, "duration-200")}
+        align="end"
+        sideOffset={8}
+      >
         {label ? <DropdownMenuLabel className="label-caps">{label}</DropdownMenuLabel> : null}
         {actions.map((action) => (
           <div key={action.label}>
             {action.separatorBefore ? <DropdownMenuSeparator /> : null}
             <DropdownMenuItem
               onSelect={action.onSelect}
-              className={action.danger ? "text-accent-red" : undefined}
+              className={cn(
+                "transition-colors duration-150 focus:translate-x-0.5",
+                action.danger ? "text-accent-red" : undefined,
+              )}
             >
               {action.label}
             </DropdownMenuItem>
@@ -113,13 +120,16 @@ export function DSContextMenu({
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
-      <ContextMenuContent className={OVERLAY_SURFACE}>
+      <ContextMenuContent className={cn(OVERLAY_SURFACE, "duration-200")}>
         {actions.map((action) => (
           <div key={action.label}>
             {action.separatorBefore ? <ContextMenuSeparator /> : null}
             <ContextMenuItem
               onSelect={action.onSelect}
-              className={action.danger ? "text-accent-red" : undefined}
+              className={cn(
+                "transition-colors duration-150 focus:translate-x-0.5",
+                action.danger ? "text-accent-red" : undefined,
+              )}
             >
               {action.label}
             </ContextMenuItem>
@@ -141,10 +151,14 @@ export function DSTooltip({
   children: ReactNode;
 }) {
   return (
-    <TooltipProvider delayDuration={200}>
+    <TooltipProvider delayDuration={140} skipDelayDuration={80}>
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
-        <TooltipContent side={side} className={OVERLAY_SURFACE}>
+        <TooltipContent
+          side={side}
+          sideOffset={10}
+          className={cn(OVERLAY_SURFACE, "text-xs shadow-ds-lg duration-200")}
+        >
           {content}
         </TooltipContent>
       </Tooltip>
