@@ -4,7 +4,7 @@
  */
 
 import { useMemo, useState } from "react";
-import { Crop, Download, Gauge, Plus, Scissors, Trash2, Type, Volume2 } from "lucide-react";
+import { Download, Plus, Trash2, Volume2 } from "lucide-react";
 import {
   Badge,
   Button,
