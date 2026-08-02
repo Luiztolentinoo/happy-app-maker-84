@@ -14,13 +14,14 @@ import {
   Timer,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Module, Gauge, Badge } from "@ds";
+import { Module, Gauge, Badge, ActionFlash, LiveDot, Parallax, Skeleton } from "@ds";
 import { CoreOrb, orbToneFor } from "@/components/CoreOrb";
 import { SaveClipButton } from "@/components/SaveClipButton";
 import { Onboarding } from "@/components/Onboarding";
 import { Button } from "@/components/ui/button";
 import { useClips } from "@/hooks/use-clips";
 import { useSettings } from "@/hooks/use-settings";
+import { useSound } from "@/lib/sound";
 import {
   APP_NAME,
   type CaptureState,
@@ -61,10 +62,12 @@ const STATE_LABEL: Record<CaptureState, string> = {
 
 function Dashboard() {
   const { settings } = useSettings();
-  const { clips, addSimulated } = useClips();
+  const { clips, ready, addSimulated } = useClips();
+  const { play } = useSound();
   const [state, setState] = useState<CaptureState>("buffering");
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [burst, setBurst] = useState(0);
+  const [flash, setFlash] = useState(0);
 
   const usedBytes = useMemo(() => clips.reduce((sum, c) => sum + c.fileSize, 0), [clips]);
   const capacity = settings.maxStorageGb * 1024 ** 3;
@@ -74,6 +77,7 @@ function Dashboard() {
 
   function simulateClip() {
     setState("saving_clip");
+    play("save");
     const durationMs = settings.bufferSeconds * 1000;
     setTimeout(() => {
       addSimulated({
@@ -96,6 +100,8 @@ function Dashboard() {
       setState("buffering");
       setSavedAt(new Date().toLocaleTimeString("pt-BR"));
       setBurst((b) => b + 1);
+      setFlash((f) => f + 1);
+      play("success");
     }, 900);
   }
 
@@ -107,12 +113,19 @@ function Dashboard() {
       <AppShell
         title="Centro de comando"
         subtitle={`${APP_NAME} — motor de captura, hardware e clipes recentes`}
-        actions={<Badge tone={state === "error" ? "red" : "green"}>{STATE_LABEL[state]}</Badge>}
+        actions={
+          <span className="flex items-center gap-2">
+            <LiveDot tone={state === "error" ? "red" : "green"} />
+            <Badge tone={state === "error" ? "red" : "green"}>{STATE_LABEL[state]}</Badge>
+          </span>
+        }
       >
         <div className="grid gap-6 xl:grid-cols-3">
-          <Module className="glow xl:col-span-2" icon={Activity} title="Motor de captura">
+          <Module className="glow ds-depth xl:col-span-2" icon={Activity} title="Motor de captura">
             <div className="grid items-center gap-8 md:grid-cols-[auto_minmax(0,1fr)_auto]">
-              <CoreOrb tone={orbToneFor(state, lowSpace)} burstKey={burst} />
+              <Parallax depth={7}>
+                <CoreOrb tone={orbToneFor(state, lowSpace)} burstKey={burst} />
+              </Parallax>
               <div className="min-w-0">
                 <p className="font-display text-4xl leading-tight font-semibold">
                   {STATE_LABEL[state]}
@@ -128,6 +141,13 @@ function Dashboard() {
                     icon={Cpu}
                     label="Encoder"
                     value={settings.codec === "h264" ? "H.264 auto" : settings.codec.toUpperCase()}
+                  />
+                </div>
+                <div className="mt-4 flex min-h-7 items-center">
+                  <ActionFlash
+                    trigger={flash}
+                    kind="success"
+                    message="Clipe salvo na biblioteca"
                   />
                 </div>
                 {savedAt ? (
@@ -209,7 +229,19 @@ function Dashboard() {
               </Button>
             }
           >
-            {recent.length === 0 ? (
+            {!ready ? (
+              <ul className="space-y-3">
+                {[0, 1, 2].map((row) => (
+                  <li key={row} className="flex items-center gap-3">
+                    <Skeleton className="h-12 w-20" />
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-3 w-3/4" />
+                      <Skeleton className="h-3 w-1/2" />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : recent.length === 0 ? (
               <p className="text-sm text-muted-foreground">
                 Nenhum clipe ainda. Use o botão Salvar para gerar um clipe simulado.
               </p>
@@ -218,7 +250,7 @@ function Dashboard() {
                 {recent.map((clip) => (
                   <li
                     key={clip.id}
-                    className="flex items-center gap-3 rounded-xl border border-border bg-background/40 p-2.5 transition-colors hover:bg-elevated/60"
+                    className="ds-hover-smart flex items-center gap-3 rounded-xl border border-border bg-background/40 p-2.5 hover:bg-elevated/60"
                   >
                     <span
                       className="grid h-12 w-20 shrink-0 place-items-center rounded-lg text-[11px] text-foreground/80"
