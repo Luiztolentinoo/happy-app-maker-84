@@ -148,9 +148,10 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
           setRecoveryAvailable(false);
         })
         .catch((cause: unknown) => {
-          notify.error("Não foi possível salvar o projeto", {
-            description: cause instanceof Error ? cause.message : String(cause),
-          });
+          notify.error(
+            "Não foi possível salvar o projeto",
+            cause instanceof Error ? cause.message : String(cause),
+          );
         })
         .finally(() => setSaving(false));
     }, AUTOSAVE_DEBOUNCE_MS);
@@ -183,9 +184,10 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
         setHistoryVersion((v) => v + 1);
         commit(next);
       } catch (cause) {
-        notify.error("Operação não aplicada", {
-          description: cause instanceof Error ? cause.message : String(cause),
-        });
+        notify.error(
+          "Operação não aplicada",
+          cause instanceof Error ? cause.message : String(cause),
+        );
       }
     },
     [commit, project],
@@ -284,12 +286,15 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
       setJobs((current) => [job, ...current.filter((item) => item.id !== job.id)]);
       notify.info(
         runtime.simulatedExport ? "Exportação simulada iniciada" : "Exportação iniciada",
-        { description: runtime.simulatedExport ? "Nenhum arquivo é gravado no modo demonstração." : job.outputPath },
+        runtime.simulatedExport
+          ? "Nenhum arquivo é gravado no modo demonstração."
+          : job.outputPath,
       );
     } catch (cause) {
-      notify.error("Exportação não iniciada", {
-        description: cause instanceof Error ? cause.message : String(cause),
-      });
+      notify.error(
+        "Exportação não iniciada",
+        cause instanceof Error ? cause.message : String(cause),
+      );
     }
   }, [project, runtime.simulatedExport]);
 
@@ -311,9 +316,10 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
         notify.success("Sessão anterior recuperada");
       }
     } catch (cause) {
-      notify.error("Recuperação falhou", {
-        description: cause instanceof Error ? cause.message : String(cause),
-      });
+      notify.error(
+        "Recuperação falhou",
+        cause instanceof Error ? cause.message : String(cause),
+      );
     } finally {
       setRecoveryAvailable(false);
     }
