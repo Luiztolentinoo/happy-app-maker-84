@@ -24,6 +24,7 @@ pub fn run() {
     tracing_subscriber::fmt().with_env_filter("info").init();
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
@@ -63,6 +64,11 @@ pub fn run() {
             commands::delete_clip,
             commands::restore_clip,
             commands::export_clip,
+            commands::get_installation_report,
+            commands::repair_installation,
+            commands::check_for_update,
+            commands::download_update,
+            commands::install_update,
         ])
         .run(tauri::generate_context!())
         .expect("error while running ClipCore");

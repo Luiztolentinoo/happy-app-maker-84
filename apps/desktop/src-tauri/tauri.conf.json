@@ -2,7 +2,7 @@
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "ClipCore",
   "version": "0.1.0",
-  "identifier": "dev.clipcore.app",
+  "identifier": "com.clipcore.desktop",
   "build": {
     "beforeDevCommand": "bun run dev",
     "devUrl": "http://localhost:8080",
@@ -25,12 +25,13 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data:; media-src 'self' asset: http://asset.localhost blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com"
+      "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data:; media-src 'self' asset: http://asset.localhost blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' ipc: http://ipc.localhost https://updates.clipcore.dev"
     },
     "trayIcon": {
       "id": "clipcore-tray",
       "iconPath": "icons/icon.png",
       "iconAsTemplate": false,
+      "menuOnLeftClick": false,
       "tooltip": "ClipCore"
     }
   },
@@ -38,24 +39,47 @@
     "updater": {
       "active": false,
       "endpoints": ["https://updates.clipcore.dev/{{target}}/{{arch}}/{{current_version}}"],
-      "dialog": true,
+      "dialog": false,
+      "windows": { "installMode": "passive" },
       "pubkey": "REPLACE_WITH_TAURI_UPDATER_PUBLIC_KEY"
     }
   },
   "bundle": {
     "active": true,
     "targets": ["nsis", "msi", "updater"],
-    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/icon.ico", "icons/icon.png"],
-    "externalBin": ["binaries/ffmpeg"],
-    "resources": ["migrations/*"],
-    "shortDescription": "Retroactive game clip capture",
-    "longDescription": "ClipCore records your gameplay into a rolling buffer so you can save the last moments of action instantly.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/64x64.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico",
+      "icons/icon.png"
+    ],
+    "externalBin": ["binaries/ffmpeg", "binaries/ffprobe"],
+    "resources": ["migrations/*", "licenses/*"],
+    "publisher": "ClipCore",
+    "homepage": "https://clipcore.dev",
+    "copyright": "© 2026 ClipCore",
+    "category": "Utility",
+    "licenseFile": "licenses/LICENSE.txt",
+    "shortDescription": "Captura retroativa de gameplay para Windows",
+    "longDescription": "Capture seus melhores momentos de gameplay sem perder FPS, sem bagunça e sem depender da nuvem. O ClipCore mantém um buffer contínuo local e salva os últimos segundos de ação instantaneamente.",
     "windows": {
-      "webviewInstallMode": { "type": "embedBootstrapper" },
+      "webviewInstallMode": { "type": "embedBootstrapper", "silent": true },
+      "allowDowngrades": false,
       "nsis": {
-        "installMode": "perMachine",
+        "installMode": "currentUser",
         "displayLanguageSelector": true,
-        "languages": ["English", "PortugueseBR"]
+        "languages": ["English", "PortugueseBR"],
+        "installerIcon": "icons/icon.ico",
+        "headerImage": "installer/header.bmp",
+        "sidebarImage": "installer/sidebar.bmp",
+        "startMenuFolder": "ClipCore",
+        "compression": "lzma"
+      },
+      "wix": {
+        "language": ["en-US", "pt-BR"],
+        "upgradeCode": "8f5e9ac6-5e35-5c68-9c8e-0f2c37f7c9d1"
       }
     }
   }

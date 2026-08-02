@@ -1,0 +1,32 @@
+Avisos de terceiros — ClipCore
+
+Este arquivo é gerado/atualizado a cada release e também está acessível em
+Configurações › Licenças e avisos de terceiros.
+
+FFmpeg / FFprobe
+  Licença: LGPL-2.1-or-later (builds LGPL). Builds GPL não são distribuídas.
+  Uso: concatenação de segmentos, thumbnails e exportação.
+  Alterações: nenhuma. Os binários são redistribuídos sem modificação.
+  Código-fonte: https://ffmpeg.org/download.html
+
+Tauri (MIT / Apache-2.0)
+  Framework do aplicativo desktop e do instalador.
+
+Rust crates
+  serde, serde_json, thiserror, parking_lot, uuid, chrono, rusqlite (SQLite —
+  domínio público), sha2, log, tracing, tracing-subscriber, windows-rs.
+  Licenças MIT e/ou Apache-2.0, exceto onde indicado.
+
+Dependências JavaScript
+  React, TanStack Router/Query/Start, Radix UI, Tailwind CSS, lucide-react,
+  recharts, sonner, zod e demais pacotes listados em package.json.
+  Licenças MIT, ISC ou Apache-2.0.
+
+Fontes
+  Sora e Inter Tight — SIL Open Font License 1.1.
+
+Ícones
+  lucide-react — ISC. Arte do Core Orb — ClipCore.
+
+A lista completa com versões exatas é publicada como SBOM junto aos artefatos
+de release.
