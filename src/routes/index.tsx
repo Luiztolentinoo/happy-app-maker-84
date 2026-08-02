@@ -144,11 +144,7 @@ function Dashboard() {
                   />
                 </div>
                 <div className="mt-4 flex min-h-7 items-center">
-                  <ActionFlash
-                    trigger={flash}
-                    kind="success"
-                    message="Clipe salvo na biblioteca"
-                  />
+                  <ActionFlash trigger={flash} kind="success" message="Clipe salvo na biblioteca" />
                 </div>
                 {savedAt ? (
                   <p className="mt-5 animate-fade-in rounded-xl border border-success/30 bg-success/10 px-4 py-2.5 text-sm text-success">

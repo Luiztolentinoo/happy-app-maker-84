@@ -8,7 +8,10 @@ const KEY = "clipcore.sound.v1";
 
 export type SoundName = "hover" | "click" | "save" | "success" | "error";
 
-const RECIPES: Record<SoundName, { freq: number; to: number; dur: number; gain: number; type: OscillatorType }> = {
+const RECIPES: Record<
+  SoundName,
+  { freq: number; to: number; dur: number; gain: number; type: OscillatorType }
+> = {
   hover: { freq: 880, to: 940, dur: 0.05, gain: 0.02, type: "sine" },
   click: { freq: 520, to: 700, dur: 0.07, gain: 0.04, type: "triangle" },
   save: { freq: 320, to: 860, dur: 0.22, gain: 0.05, type: "sine" },
@@ -20,7 +23,9 @@ let context: AudioContext | null = null;
 
 function audio(): AudioContext | null {
   if (typeof window === "undefined") return null;
-  const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const Ctor =
+    window.AudioContext ??
+    (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!Ctor) return null;
   context ??= new Ctor();
   return context;

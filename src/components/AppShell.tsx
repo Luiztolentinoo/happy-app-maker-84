@@ -29,7 +29,6 @@ import {
   type NavItem,
 } from "@ds";
 
-
 /** Fonte única de navegação — sidebar e navegação móvel derivam desta lista. */
 const NAV: NavItem[] = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -143,4 +142,3 @@ export function AppShell({
     </div>
   );
 }
-

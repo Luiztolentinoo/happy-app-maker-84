@@ -84,7 +84,11 @@ export function DSDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent className={cn(OVERLAY_SURFACE, "duration-200")} align="end" sideOffset={8}>
+      <DropdownMenuContent
+        className={cn(OVERLAY_SURFACE, "duration-200")}
+        align="end"
+        sideOffset={8}
+      >
         {label ? <DropdownMenuLabel className="label-caps">{label}</DropdownMenuLabel> : null}
         {actions.map((action) => (
           <div key={action.label}>
