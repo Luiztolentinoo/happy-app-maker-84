@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import {
   LayoutDashboard,
@@ -11,9 +11,24 @@ import {
   Settings,
   UserRound,
   Radio,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { APP_NAME, isDemoMode } from "@/lib/clipcore";
-import { Badge, Icon, MobileNav, Sidebar, Topbar, type NavItem } from "@ds";
+import { useSound } from "@/lib/sound";
+import { cn } from "@/lib/utils";
+import {
+  Badge,
+  Button,
+  DSTooltip,
+  Icon,
+  MobileNav,
+  RouteTransition,
+  Sidebar,
+  Topbar,
+  type NavItem,
+} from "@ds";
+
 
 /** Fonte única de navegação — sidebar e navegação móvel derivam desta lista. */
 const NAV: NavItem[] = [
