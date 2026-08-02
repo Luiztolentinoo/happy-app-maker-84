@@ -104,7 +104,7 @@ export function AppShell({
   children: ReactNode;
 }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
-  const isLoading = useRouterState({ select: (state) => state.status === "pending" });
+  const isLoading = useRouterState({ select: (state) => state.isLoading || state.isTransitioning });
   const { play } = useSound();
 
   return (
@@ -132,7 +132,7 @@ export function AppShell({
         <main
           className={cn(
             "ds-scroll flex-1 px-6 py-8 pb-24 transition-[filter,opacity] duration-300 md:px-10 lg:pb-8",
-            isLoading && "pointer-events-none opacity-70 blur-[3px]",
+            isLoading && "opacity-70 blur-[3px]",
           )}
         >
           <RouteTransition routeKey={pathname}>{children}</RouteTransition>
