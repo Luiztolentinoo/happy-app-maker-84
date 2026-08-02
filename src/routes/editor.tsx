@@ -4,16 +4,7 @@ import { AlertTriangle, Film, Redo2, Save, Scissors, Undo2 } from "lucide-react"
 import { AppShell } from "@/components/AppShell";
 import { EditorTimeline } from "@/components/editor/EditorTimeline";
 import { EditorProperties } from "@/components/editor/EditorProperties";
-import {
-  Badge,
-  Button,
-  EmptyState,
-  ErrorState,
-  Icon,
-  Module,
-  Panel,
-  SkeletonMedia,
-} from "@ds";
+import { Badge, Button, EmptyState, ErrorState, Icon, Module, Panel, SkeletonMedia } from "@ds";
 import { useClips } from "@/hooks/use-clips";
 import { useEditor } from "@/hooks/useEditor";
 import { formatDuration } from "@/lib/clipcore";
@@ -43,10 +34,7 @@ export const Route = createFileRoute("/editor")({
 function EditorPage() {
   const { clips } = useClips();
   const [clipId, setClipId] = useState<string | null>(null);
-  const clip = useMemo(
-    () => clips.find((item) => item.id === clipId) ?? clips[0],
-    [clips, clipId],
-  );
+  const clip = useMemo(() => clips.find((item) => item.id === clipId) ?? clips[0], [clips, clipId]);
   const editor = useEditor(clip);
 
   /* Atalhos de teclado do editor (undo/redo/split/espaço). */
@@ -178,7 +166,8 @@ function EditorPage() {
                     {editor.timeline?.overlays
                       .filter(
                         (overlay) =>
-                          editor.playheadMs >= overlay.startMs && editor.playheadMs <= overlay.endMs,
+                          editor.playheadMs >= overlay.startMs &&
+                          editor.playheadMs <= overlay.endMs,
                       )
                       .map((overlay) => (
                         <span
@@ -198,7 +187,10 @@ function EditorPage() {
                       ))}
 
                     {editor.timeline?.crop.grid ? (
-                      <div aria-hidden className="pointer-events-none absolute inset-0 grid grid-cols-3 grid-rows-3">
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 grid grid-cols-3 grid-rows-3"
+                      >
                         {Array.from({ length: 9 }).map((_, index) => (
                           <span key={index} className="border border-ink/10" />
                         ))}

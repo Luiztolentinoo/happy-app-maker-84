@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { createTimeline, applyOperation, nextId } from "@/editor/timeline";
 import { EditorHistory } from "@/editor/history";
-import { buildExportPlan, buildTextFilter, validateSourcePath, FfmpegArgError } from "@/editor/ffmpeg";
+import {
+  buildExportPlan,
+  buildTextFilter,
+  validateSourcePath,
+  FfmpegArgError,
+} from "@/editor/ffmpeg";
 import { estimateExportBytes, resolveExportSettings, sanitizeFileName } from "@/editor/presets";
 import { PROJECT_FORMAT_VERSION, type EditProject } from "@/editor/types";
 
@@ -69,7 +74,11 @@ describe("presets", () => {
 
 describe("history", () => {
   it("desfaz e refaz mantendo a timeline", () => {
-    const base = createTimeline({ durationMs: 10_000, hasMicrophoneTrack: false, hasApplicationTrack: false });
+    const base = createTimeline({
+      durationMs: 10_000,
+      hasMicrophoneTrack: false,
+      hasApplicationTrack: false,
+    });
     const history = new EditorHistory(base);
     const op = { kind: "trim", edge: "start", atMs: 2_000 } as const;
     const trimmed = applyOperation(base, op);
@@ -83,7 +92,11 @@ describe("history", () => {
 
   it("agrupa operações contínuas do mesmo tipo", () => {
     let now = 1_000;
-    const base = createTimeline({ durationMs: 10_000, hasMicrophoneTrack: false, hasApplicationTrack: false });
+    const base = createTimeline({
+      durationMs: 10_000,
+      hasMicrophoneTrack: false,
+      hasApplicationTrack: false,
+    });
     const history = new EditorHistory(base, { now: () => now });
     const segId = base.tracks[0]!.segments[0]!.id;
 
@@ -101,7 +114,11 @@ describe("history", () => {
   });
 
   it("limpa o redo após nova operação", () => {
-    const base = createTimeline({ durationMs: 10_000, hasMicrophoneTrack: false, hasApplicationTrack: false });
+    const base = createTimeline({
+      durationMs: 10_000,
+      hasMicrophoneTrack: false,
+      hasApplicationTrack: false,
+    });
     const history = new EditorHistory(base);
     const op = { kind: "split", atMs: 5_000 } as const;
     history.push(op, applyOperation(base, op));

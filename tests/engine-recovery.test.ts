@@ -60,10 +60,13 @@ describe("AutoRecovery", () => {
     const completed = vi.fn();
     bus.on("recovery:found", found);
     bus.on("recovery:completed", completed);
-    const recovery = new AutoRecovery(port([{ path: "/tmp/a.part", bytes: 5_000, recoverable: true }]), {
-      ...options,
-      bus,
-    });
+    const recovery = new AutoRecovery(
+      port([{ path: "/tmp/a.part", bytes: 5_000, recoverable: true }]),
+      {
+        ...options,
+        bus,
+      },
+    );
     await recovery.run();
     expect(found).toHaveBeenCalledWith({ items: 1 });
     expect(completed).toHaveBeenCalledWith({ recovered: 1, discarded: 0 });

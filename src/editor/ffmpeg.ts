@@ -20,7 +20,10 @@ export class FfmpegArgError extends Error {
 }
 
 const ALLOWED_INPUT_EXT = new Set([".mp4", ".mkv", ".mov", ".webm", ".avi", ".m4v"]);
-const ENCODER_MAP: Record<ExportSettings["encoder"], Record<ExportSettings["videoCodec"], string>> = {
+const ENCODER_MAP: Record<
+  ExportSettings["encoder"],
+  Record<ExportSettings["videoCodec"], string>
+> = {
   auto: { h264: "libx264", hevc: "libx265", av1: "libsvtav1" },
   x264: { h264: "libx264", hevc: "libx265", av1: "libsvtav1" },
   nvenc: { h264: "h264_nvenc", hevc: "hevc_nvenc", av1: "av1_nvenc" },
@@ -43,7 +46,10 @@ export function validateSourcePath(path: string): string {
   assert(!path.startsWith("-"), "Caminho de origem inválido.");
   assert(!path.includes("\0"), "Caminho de origem inválido.");
   assert(!path.includes(".."), "Caminho de origem não pode conter '..'.");
-  assert(ALLOWED_INPUT_EXT.has(extensionOf(path)), `Extensão não suportada: ${extensionOf(path) || "?"}`);
+  assert(
+    ALLOWED_INPUT_EXT.has(extensionOf(path)),
+    `Extensão não suportada: ${extensionOf(path) || "?"}`,
+  );
   return path;
 }
 
@@ -77,7 +83,10 @@ export function buildAspectFilters(settings: ExportSettings): string[] {
   const { width, height, fit, aspect } = settings;
   const ratio = ASPECT_PRESET_LIST.find((item) => item.id === aspect)?.ratio ?? null;
   if (aspect === "original" && ratio === null && fit === "fit") {
-    return [`scale=${width}:${height}:force_original_aspect_ratio=decrease`, `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=black`];
+    return [
+      `scale=${width}:${height}:force_original_aspect_ratio=decrease`,
+      `pad=${width}:${height}:(ow-iw)/2:(oh-ih)/2:color=black`,
+    ];
   }
   switch (fit) {
     case "fill":
@@ -169,7 +178,8 @@ export function buildExportPlan(project: EditProject): FfmpegPlan {
 
     const gain = segment.muted ? 0 : segment.volume;
     const aChain = [`atrim=start=${start}:end=${end}`, "asetpts=PTS-STARTPTS"];
-    if (segment.speed !== 1) aChain.push(`atempo=${Math.min(2, Math.max(0.5, segment.speed)).toFixed(3)}`);
+    if (segment.speed !== 1)
+      aChain.push(`atempo=${Math.min(2, Math.max(0.5, segment.speed)).toFixed(3)}`);
     aChain.push(`volume=${gain.toFixed(3)}`);
     filters.push(`[0:a]${aChain.join(",")}[${aLabel}]`);
 

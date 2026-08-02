@@ -55,7 +55,12 @@ export class AutoRecovery {
 
   async run(): Promise<RecoveryResult> {
     const items = await this.port.scan();
-    const result: RecoveryResult = { scanned: items.length, recovered: [], discarded: [], failed: [] };
+    const result: RecoveryResult = {
+      scanned: items.length,
+      recovered: [],
+      discarded: [],
+      failed: [],
+    };
     if (items.length > 0) {
       this.log.warn("fragmentos encontrados", { items: items.length });
       this.bus.emit("recovery:found", { items: items.length });

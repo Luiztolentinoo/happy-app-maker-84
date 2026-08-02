@@ -17,7 +17,13 @@ import {
 } from "./nativeClient";
 import { estimateExportMs, resolveExportSettings, sanitizeFileName } from "@/editor/presets";
 import { buildExportPlan } from "@/editor/ffmpeg";
-import { applyOperation, createTimeline, nextId, computeDurationMs, validateTimeline } from "@/editor/timeline";
+import {
+  applyOperation,
+  createTimeline,
+  nextId,
+  computeDurationMs,
+  validateTimeline,
+} from "@/editor/timeline";
 import {
   PROJECT_FORMAT_VERSION,
   parseProject,
@@ -138,7 +144,11 @@ export async function createEditProject(input: CreateProjectInput): Promise<Edit
 }
 
 export async function getEditProject(id: string): Promise<EditProject | null> {
-  const raw = await nativeInvoke<unknown>("get_edit_project", { id }, () => readStore()[id] ?? null);
+  const raw = await nativeInvoke<unknown>(
+    "get_edit_project",
+    { id },
+    () => readStore()[id] ?? null,
+  );
   if (!raw) return null;
   const parsed = parseProject(raw);
   if (!parsed.ok) throw new Error(parsed.error);
@@ -274,7 +284,10 @@ export function discardRecovery(projectId: string): void {
 /* ---------------------------------------------------------------- operations */
 
 /** Aplica uma operação ao projeto (sem persistir): usado pelos hooks. */
-export function applyProjectOperation(project: EditProject, operation: EditorOperation): EditProject {
+export function applyProjectOperation(
+  project: EditProject,
+  operation: EditorOperation,
+): EditProject {
   const timeline = applyOperation(project.timeline, operation);
   return { ...project, timeline };
 }
@@ -341,7 +354,8 @@ export async function startExport(input: StartExportInput): Promise<ExportJob> {
     if (!entry) return;
     ticks += 1;
     const progress = Math.min(1, ticks / 20);
-    const stage = progress >= 1 ? "completed" : stages[Math.min(stages.length - 1, Math.floor(progress * 4))]!;
+    const stage =
+      progress >= 1 ? "completed" : stages[Math.min(stages.length - 1, Math.floor(progress * 4))]!;
     entry.job = {
       ...entry.job,
       progress,
@@ -440,7 +454,10 @@ export async function validateSourceMedia(
   }
 }
 
-export async function generateTimelineThumbnails(projectId: string, count: number): Promise<string[]> {
+export async function generateTimelineThumbnails(
+  projectId: string,
+  count: number,
+): Promise<string[]> {
   return nativeInvoke<string[]>("generate_timeline_thumbnails", { projectId, count }, () => []);
 }
 

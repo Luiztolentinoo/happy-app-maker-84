@@ -43,18 +43,17 @@ export const Route = createFileRoute("/updates")({
   component: UpdatesPage,
 });
 
-const STATUS_META: Record<UpdateStatus, { label: string; tone: Tone }> =
-  {
-    up_to_date: { label: "atualizado", tone: "green" },
-    checking: { label: "verificando", tone: "blue" },
-    available: { label: "disponível", tone: "purple" },
-    downloading: { label: "baixando", tone: "blue" },
-    ready_to_install: { label: "pronto para instalar", tone: "green" },
-    installing: { label: "instalando", tone: "blue" },
-    failed: { label: "falhou", tone: "red" },
-    blocked_unsigned: { label: "bloqueado por assinatura", tone: "yellow" },
-    unavailable_in_browser: { label: "indisponível no navegador", tone: "yellow" },
-  };
+const STATUS_META: Record<UpdateStatus, { label: string; tone: Tone }> = {
+  up_to_date: { label: "atualizado", tone: "green" },
+  checking: { label: "verificando", tone: "blue" },
+  available: { label: "disponível", tone: "purple" },
+  downloading: { label: "baixando", tone: "blue" },
+  ready_to_install: { label: "pronto para instalar", tone: "green" },
+  installing: { label: "instalando", tone: "blue" },
+  failed: { label: "falhou", tone: "red" },
+  blocked_unsigned: { label: "bloqueado por assinatura", tone: "yellow" },
+  unavailable_in_browser: { label: "indisponível no navegador", tone: "yellow" },
+};
 
 function UpdatesPage() {
   const [info, setInfo] = useState<UpdateInfo>(() => updateService.base());
@@ -124,7 +123,11 @@ function UpdatesPage() {
       }
     >
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_26rem]">
-        <Module icon={DownloadCloud} title="Estado da atualização" action={<Badge tone={meta.tone}>{meta.label}</Badge>}>
+        <Module
+          icon={DownloadCloud}
+          title="Estado da atualização"
+          action={<Badge tone={meta.tone}>{meta.label}</Badge>}
+        >
           <dl className="grid gap-3 sm:grid-cols-2">
             <Row label="Versão instalada" value={APP_VERSION} />
             <Row label="Canal" value={CHANNEL_LABEL[APP_CHANNEL]} />
@@ -135,10 +138,7 @@ function UpdatesPage() {
               }
             />
             <Row label="Nova versão" value={info.availableVersion ?? "—"} />
-            <Row
-              label="Tamanho"
-              value={info.sizeBytes ? formatBytes(info.sizeBytes) : "—"}
-            />
+            <Row label="Tamanho" value={info.sizeBytes ? formatBytes(info.sizeBytes) : "—"} />
             <Row
               label="Assinatura"
               value={info.signatureVerified ? "verificada" : "não verificada"}
@@ -204,7 +204,9 @@ function UpdatesPage() {
             <ul className="space-y-2 text-xs text-muted-foreground">
               <li>Manifesto servido por HTTPS e verificado com a chave pública embutida.</li>
               <li>Nenhuma release sem assinatura válida é aceita ou instalada.</li>
-              <li>Download em diretório temporário; a instalação atual só é trocada após validação.</li>
+              <li>
+                Download em diretório temporário; a instalação atual só é trocada após validação.
+              </li>
               <li>A chave privada nunca fica no repositório — apenas em secrets do CI.</li>
             </ul>
             {blocked ? (

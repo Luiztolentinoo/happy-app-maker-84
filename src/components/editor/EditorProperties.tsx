@@ -68,7 +68,11 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
           >
             Fim aqui
           </Button>
-          <Button size="sm" variant="secondary" onClick={() => dispatch({ kind: "split", atMs: playheadMs })}>
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={() => dispatch({ kind: "split", atMs: playheadMs })}
+          >
             Cortar
           </Button>
           <Button
@@ -82,7 +86,8 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
           </Button>
         </div>
         <p className="text-xs text-ink-muted">
-          Duração final · <span className="font-mono text-ink-secondary">{formatDuration(durationMs)}</span>
+          Duração final ·{" "}
+          <span className="font-mono text-ink-secondary">{formatDuration(durationMs)}</span>
         </p>
       </Panel>
 
@@ -111,7 +116,9 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
             size="sm"
             variant={segment.muted ? "primary" : "secondary"}
             icon={Volume2}
-            onClick={() => dispatch({ kind: "mute", segmentIds: [segment.id], muted: !segment.muted })}
+            onClick={() =>
+              dispatch({ kind: "mute", segmentIds: [segment.id], muted: !segment.muted })
+            }
           >
             {segment.muted ? "Reativar áudio" : "Silenciar trecho"}
           </Button>
@@ -139,7 +146,9 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
           <Button
             size="sm"
             variant={timeline.crop.safeAreas ? "primary" : "secondary"}
-            onClick={() => dispatch({ kind: "aspect", patch: { safeAreas: !timeline.crop.safeAreas } })}
+            onClick={() =>
+              dispatch({ kind: "aspect", patch: { safeAreas: !timeline.crop.safeAreas } })
+            }
           >
             Safe areas
           </Button>
@@ -213,7 +222,9 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
               value={overlay.fontSize}
               min={8}
               max={160}
-              onChange={(fontSize) => dispatch({ kind: "text_update", id: overlay.id, patch: { fontSize } })}
+              onChange={(fontSize) =>
+                dispatch({ kind: "text_update", id: overlay.id, patch: { fontSize } })
+              }
             />
             <SliderField
               label="Posição vertical"
@@ -234,7 +245,15 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
 }
 
 function ExportPanel({ editor }: { editor: UseEditorResult }) {
-  const { project, exporting, jobs, runExport, abortExport, applyExportPreset, updateExportSettings } = editor;
+  const {
+    project,
+    exporting,
+    jobs,
+    runExport,
+    abortExport,
+    applyExportPreset,
+    updateExportSettings,
+  } = editor;
   if (!project) return null;
   const settings = project.exportSettings;
 
@@ -308,7 +327,13 @@ function ExportPanel({ editor }: { editor: UseEditorResult }) {
 
 function JobRow({ job, onCancel }: { job: ExportJob; onCancel: (id: string) => Promise<void> }) {
   const tone: "red" | "green" | "yellow" | "purple" =
-    job.stage === "failed" ? "red" : job.stage === "completed" ? "green" : job.stage === "cancelled" ? "yellow" : "purple";
+    job.stage === "failed"
+      ? "red"
+      : job.stage === "completed"
+        ? "green"
+        : job.stage === "cancelled"
+          ? "yellow"
+          : "purple";
   return (
     <div className="space-y-1.5 rounded-lg border border-border-primary p-3">
       <div className="flex items-center justify-between gap-2">

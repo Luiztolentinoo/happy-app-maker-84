@@ -56,7 +56,8 @@ export class EngineLogger {
     if (ORDER[level] < ORDER[this.minLevel]) return;
     const entry: LogEntry = { at: this.now(), level, scope, message, ...(data ? { data } : {}) };
     this.entries.push(entry);
-    if (this.entries.length > this.capacity) this.entries.splice(0, this.entries.length - this.capacity);
+    if (this.entries.length > this.capacity)
+      this.entries.splice(0, this.entries.length - this.capacity);
     if (this.mirror) {
       const line = `[clipcore:${scope}] ${message}`;
       if (level === "error") console.error(line, data ?? "");

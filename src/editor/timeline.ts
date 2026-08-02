@@ -43,7 +43,10 @@ export function enabledSegments(timeline: Timeline): TimelineSegment[] {
 
 /** Duração final do vídeo exportado, considerando velocidade e remoções. */
 export function computeDurationMs(timeline: Timeline): number {
-  return enabledSegments(timeline).reduce((total, segment) => total + segmentDurationMs(segment), 0);
+  return enabledSegments(timeline).reduce(
+    (total, segment) => total + segmentDurationMs(segment),
+    0,
+  );
 }
 
 /** Reencadeia os segmentos ativos para que a timeline não tenha buracos. */
@@ -206,7 +209,9 @@ export function setTrackGain(timeline: Timeline, trackId: string, gain: number):
   const clamped = Math.min(2, Math.max(0, gain));
   return {
     ...timeline,
-    tracks: timeline.tracks.map((track) => (track.id === trackId ? { ...track, gain: clamped } : track)),
+    tracks: timeline.tracks.map((track) =>
+      track.id === trackId ? { ...track, gain: clamped } : track,
+    ),
   };
 }
 
@@ -221,7 +226,11 @@ export function addOverlay(timeline: Timeline, overlay: TextOverlay): Timeline {
   return { ...timeline, overlays: [...timeline.overlays, overlay] };
 }
 
-export function updateOverlay(timeline: Timeline, id: string, patch: Partial<TextOverlay>): Timeline {
+export function updateOverlay(
+  timeline: Timeline,
+  id: string,
+  patch: Partial<TextOverlay>,
+): Timeline {
   return {
     ...timeline,
     overlays: timeline.overlays.map((overlay) =>
@@ -353,7 +362,14 @@ export function createTimeline(options: {
     selection: [segment.id],
     markers: [],
     overlays: [],
-    crop: { aspect: "original", fit: "fit", offsetX: 0.5, offsetY: 0.5, safeAreas: false, grid: false },
+    crop: {
+      aspect: "original",
+      fit: "fit",
+      offsetX: 0.5,
+      offsetY: 0.5,
+      safeAreas: false,
+      grid: false,
+    },
     tracks: [
       track("video", "Vídeo", 0, true, [segment]),
       track("game_audio", "Áudio do jogo", 1, true, []),
@@ -382,7 +398,8 @@ export function validateTimeline(timeline: Timeline): string[] {
     }
   }
   for (const overlay of timeline.overlays) {
-    if (overlay.endMs <= overlay.startMs) problems.push(`Texto "${overlay.text}" tem duração zero.`);
+    if (overlay.endMs <= overlay.startMs)
+      problems.push(`Texto "${overlay.text}" tem duração zero.`);
   }
   return problems;
 }

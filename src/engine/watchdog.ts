@@ -3,7 +3,12 @@
  * subsystem as stalled and triggers its registered restart routine.
  */
 
-import { SUBSYSTEMS, type SubsystemHealth, type SubsystemId, type SubsystemStatus } from "./contracts";
+import {
+  SUBSYSTEMS,
+  type SubsystemHealth,
+  type SubsystemId,
+  type SubsystemStatus,
+} from "./contracts";
 import { engineBus, type EventBus } from "./eventBus";
 import { engineLogger, type EngineLogger } from "./logger";
 import { engineMetrics, METRICS, type MetricsRegistry } from "./metrics";
