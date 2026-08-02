@@ -45,7 +45,8 @@ describe("CircularBuffer", () => {
     const pinned = buffer.pinLast(4);
     expect(pinned.map((s) => s.id)).toEqual(["a", "b"]);
     buffer.push(segment("c"));
-    expect(buffer.stats().segments).toBe(3);
+    // over capacity: only the unpinned newcomer may go, the pinned window stays.
+    expect(buffer.stats().segments).toBe(2);
     buffer.release(["a", "b"]);
     expect(buffer.stats().segments).toBe(2);
   });
