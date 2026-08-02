@@ -19,6 +19,7 @@ import {
   Badge,
   Chip,
   MediaCard,
+  MediaPlayer,
   EmptyState,
   SkeletonMedia,
   Button as DSButton,
