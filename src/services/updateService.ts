@@ -95,7 +95,11 @@ export const updateService = {
         lastCheckedAt: new Date().toISOString(),
       };
     }
-    const result = await nativeInvoke<Partial<UpdateInfo>>("check_for_update", undefined, () => ({}));
+    const result = await nativeInvoke<Partial<UpdateInfo>>(
+      "check_for_update",
+      undefined,
+      () => ({}),
+    );
     return { ...base, ...result, lastCheckedAt: new Date().toISOString() };
   },
 
@@ -103,7 +107,11 @@ export const updateService = {
     const blocked = updateBlockReason();
     if (blocked) return { ...baseUpdateInfo(), status: "blocked_unsigned", error: blocked };
     onProgress?.(0);
-    const result = await nativeInvoke<Partial<UpdateInfo>>("download_update", undefined, () => ({}));
+    const result = await nativeInvoke<Partial<UpdateInfo>>(
+      "download_update",
+      undefined,
+      () => ({}),
+    );
     onProgress?.(100);
     return { ...baseUpdateInfo(), ...result, status: "ready_to_install", progress: 100 };
   },

@@ -18,7 +18,11 @@ describe("EngineLogger", () => {
   });
 
   it("filters below the minimum level", () => {
-    const logger = new EngineLogger({ minLevel: "warn", mirrorToConsole: false, bus: new EventBus() });
+    const logger = new EngineLogger({
+      minLevel: "warn",
+      mirrorToConsole: false,
+      bus: new EventBus(),
+    });
     const scoped = logger.child("encoder");
     scoped.debug("ignored");
     scoped.error("kept");

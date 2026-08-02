@@ -168,7 +168,10 @@ export class WorkQueue<T = unknown> {
       job.status = "done";
       job.finishedAt = this.now();
       job.error = null;
-      this.metrics.observe(METRICS.jobDurationMs, job.finishedAt - (job.startedAt ?? job.finishedAt));
+      this.metrics.observe(
+        METRICS.jobDurationMs,
+        job.finishedAt - (job.startedAt ?? job.finishedAt),
+      );
       this.history.push(job);
       this.log.info("job concluído", { id: job.id, attempts: job.attempts });
     } catch (error) {

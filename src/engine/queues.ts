@@ -75,7 +75,11 @@ export class EngineQueues {
   }
 
   enqueueExport(payload: ExportJobPayload): QueueJob<ExportJobPayload> {
-    return this.export.enqueue(payload, `Exportar ${payload.format.toUpperCase()}`, QUEUE_PRIORITY.export);
+    return this.export.enqueue(
+      payload,
+      `Exportar ${payload.format.toUpperCase()}`,
+      QUEUE_PRIORITY.export,
+    );
   }
 
   enqueueThumbnail(payload: ThumbnailJobPayload): QueueJob<ThumbnailJobPayload> {

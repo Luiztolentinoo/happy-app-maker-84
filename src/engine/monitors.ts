@@ -225,7 +225,8 @@ export class PerformanceMonitor {
   /** Pure decision function, mirrored by `DefaultPerformanceMonitor` in Rust. */
   shouldDegrade(sample: PerformanceSample): string | null {
     const t = this.thresholds;
-    if (sample.droppedFrames > t.maxDroppedFrames) return `${sample.droppedFrames} quadros perdidos`;
+    if (sample.droppedFrames > t.maxDroppedFrames)
+      return `${sample.droppedFrames} quadros perdidos`;
     if (sample.encodeLagMs > t.maxEncodeLagMs) return `atraso do encoder ${sample.encodeLagMs}ms`;
     if (sample.targetFps > 0 && sample.fps > 0 && sample.fps / sample.targetFps < t.minFpsRatio) {
       return `FPS de captura em ${sample.fps} (alvo ${sample.targetFps})`;

@@ -77,7 +77,10 @@ export function EditorTimeline({
         <div
           aria-hidden
           className="pointer-events-none absolute inset-y-0 z-20 w-px bg-primary"
-          style={{ left: `calc(${Math.min(100, Math.max(0, playheadPercent))}% )`, boxShadow: "0 0 12px var(--primary)" }}
+          style={{
+            left: `calc(${Math.min(100, Math.max(0, playheadPercent))}% )`,
+            boxShadow: "0 0 12px var(--primary)",
+          }}
         />
 
         <div className="space-y-2">
@@ -219,7 +222,10 @@ function SegmentBlock({
   onSelect: (ids: string[]) => void;
 }) {
   const left = (segment.timelineStartMs / durationMs) * 100;
-  const width = Math.max(0.6, ((segment.timelineEndMs - segment.timelineStartMs) / durationMs) * 100);
+  const width = Math.max(
+    0.6,
+    ((segment.timelineEndMs - segment.timelineStartMs) / durationMs) * 100,
+  );
   const bars = audio ? waveform.slice(0, 60) : [];
 
   return (
@@ -253,7 +259,9 @@ function SegmentBlock({
         </span>
       ) : (
         <span className="absolute bottom-1 left-1.5 font-mono text-[10px] text-ink/80">
-          {segment.speed !== 1 ? `${segment.speed.toFixed(2)}x` : formatDuration(segment.timelineEndMs - segment.timelineStartMs)}
+          {segment.speed !== 1
+            ? `${segment.speed.toFixed(2)}x`
+            : formatDuration(segment.timelineEndMs - segment.timelineStartMs)}
         </span>
       )}
     </button>

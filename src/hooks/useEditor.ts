@@ -143,7 +143,11 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
       setSaving(true);
       void autosaveEditProject(next)
         .then((saved) => {
-          setProject((current) => (current && current.id === saved.id ? { ...current, updatedAt: saved.updatedAt } : current));
+          setProject((current) =>
+            current && current.id === saved.id
+              ? { ...current, updatedAt: saved.updatedAt }
+              : current,
+          );
           setLastSavedAt(saved.updatedAt);
           setRecoveryAvailable(false);
         })
@@ -220,7 +224,10 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
     [patchTimeline],
   );
 
-  const setSelection = useCallback((ids: string[]) => patchTimeline({ selection: ids }), [patchTimeline]);
+  const setSelection = useCallback(
+    (ids: string[]) => patchTimeline({ selection: ids }),
+    [patchTimeline],
+  );
 
   const undo = useCallback(() => {
     const history = historyRef.current;
@@ -286,9 +293,7 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
       setJobs((current) => [job, ...current.filter((item) => item.id !== job.id)]);
       notify.info(
         runtime.simulatedExport ? "Exportação simulada iniciada" : "Exportação iniciada",
-        runtime.simulatedExport
-          ? "Nenhum arquivo é gravado no modo demonstração."
-          : job.outputPath,
+        runtime.simulatedExport ? "Nenhum arquivo é gravado no modo demonstração." : job.outputPath,
       );
     } catch (cause) {
       notify.error(
@@ -316,10 +321,7 @@ export function useEditor(clip: Clip | undefined): UseEditorResult {
         notify.success("Sessão anterior recuperada");
       }
     } catch (cause) {
-      notify.error(
-        "Recuperação falhou",
-        cause instanceof Error ? cause.message : String(cause),
-      );
+      notify.error("Recuperação falhou", cause instanceof Error ? cause.message : String(cause));
     } finally {
       setRecoveryAvailable(false);
     }

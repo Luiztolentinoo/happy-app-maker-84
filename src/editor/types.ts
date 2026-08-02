@@ -228,8 +228,7 @@ export type TextOperation =
   | { kind: "text_remove"; id: string };
 export type AspectOperation = { kind: "aspect"; patch: Partial<CropOperation> };
 export type MarkerOperation =
-  | { kind: "marker_add"; marker: TimelineMarker }
-  | { kind: "marker_remove"; id: string };
+  { kind: "marker_add"; marker: TimelineMarker } | { kind: "marker_remove"; id: string };
 
 export type EditorOperation =
   | TrimOperation
@@ -254,7 +253,10 @@ export interface EditorHistoryEntry {
 /* ---------------------------------------------------------------- migrations */
 
 /** Registro de migrations do formato de projeto, aplicadas em ordem. */
-const MIGRATIONS: Array<{ to: number; migrate: (raw: Record<string, unknown>) => Record<string, unknown> }> = [
+const MIGRATIONS: Array<{
+  to: number;
+  migrate: (raw: Record<string, unknown>) => Record<string, unknown>;
+}> = [
   {
     to: 2,
     // v1 guardava apenas `{ trimStartMs, trimEndMs }` e não tinha crop/overlays.
@@ -267,9 +269,14 @@ const MIGRATIONS: Array<{ to: number; migrate: (raw: Record<string, unknown>) =>
           overlays: timeline["overlays"] ?? [],
           markers: timeline["markers"] ?? [],
           snapMs: timeline["snapMs"] ?? 100,
-          crop:
-            timeline["crop"] ??
-            { aspect: "original", fit: "fit", offsetX: 0.5, offsetY: 0.5, safeAreas: false, grid: false },
+          crop: timeline["crop"] ?? {
+            aspect: "original",
+            fit: "fit",
+            offsetX: 0.5,
+            offsetY: 0.5,
+            safeAreas: false,
+            grid: false,
+          },
         },
       };
     },
@@ -277,8 +284,7 @@ const MIGRATIONS: Array<{ to: number; migrate: (raw: Record<string, unknown>) =>
 ];
 
 export type ProjectParseResult =
-  | { ok: true; project: EditProject; migratedFrom: number | null }
-  | { ok: false; error: string };
+  { ok: true; project: EditProject; migratedFrom: number | null } | { ok: false; error: string };
 
 /**
  * Aplica migrations e valida. Nunca lança: um projeto corrompido devolve
@@ -286,7 +292,8 @@ export type ProjectParseResult =
  * sobrescrever dados do usuário.
  */
 export function parseProject(input: unknown): ProjectParseResult {
-  if (!input || typeof input !== "object") return { ok: false, error: "Projeto vazio ou inválido." };
+  if (!input || typeof input !== "object")
+    return { ok: false, error: "Projeto vazio ou inválido." };
   let raw = { ...(input as Record<string, unknown>) };
   const from = typeof raw["version"] === "number" ? (raw["version"] as number) : 1;
   if (from > PROJECT_FORMAT_VERSION) {
@@ -300,5 +307,9 @@ export function parseProject(input: unknown): ProjectParseResult {
   if (!parsed.success) {
     return { ok: false, error: parsed.error.issues[0]?.message ?? "Projeto inválido." };
   }
-  return { ok: true, project: parsed.data, migratedFrom: from === PROJECT_FORMAT_VERSION ? null : from };
+  return {
+    ok: true,
+    project: parsed.data,
+    migratedFrom: from === PROJECT_FORMAT_VERSION ? null : from,
+  };
 }

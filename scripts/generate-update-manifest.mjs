@@ -25,9 +25,7 @@ const notesFile = arg("notes", "CHANGELOG.md");
 const channel = arg("channel", "alpha");
 const baseUrl = arg("base-url", process.env.CLIPCORE_UPDATE_BASE_URL ?? "");
 
-const version = JSON.parse(
-  readFileSync("apps/desktop/src-tauri/tauri.conf.json", "utf8"),
-).version;
+const version = JSON.parse(readFileSync("apps/desktop/src-tauri/tauri.conf.json", "utf8")).version;
 
 if (!baseUrl.startsWith("https://")) {
   console.error("--base-url precisa ser HTTPS (ou defina CLIPCORE_UPDATE_BASE_URL).");

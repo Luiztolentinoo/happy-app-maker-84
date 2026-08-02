@@ -6,9 +6,21 @@
  */
 
 export * from "./contracts";
-export { EventBus, engineBus, type EngineEvents, type EngineEventName, type Unsubscribe } from "./eventBus";
+export {
+  EventBus,
+  engineBus,
+  type EngineEvents,
+  type EngineEventName,
+  type Unsubscribe,
+} from "./eventBus";
 export { EngineLogger, ScopedLogger, engineLogger, type LogEntry, type LogLevel } from "./logger";
-export { MetricsRegistry, engineMetrics, METRICS, type MetricsSnapshot, type HistogramSnapshot } from "./metrics";
+export {
+  MetricsRegistry,
+  engineMetrics,
+  METRICS,
+  type MetricsSnapshot,
+  type HistogramSnapshot,
+} from "./metrics";
 export {
   DEFAULT_THRESHOLDS,
   EncoderMonitor,
@@ -20,7 +32,13 @@ export {
   type Monitor,
   type PerformanceSample,
 } from "./monitors";
-export { WorkQueue, type JobRunner, type QueueId, type QueueJob, type QueueSnapshot } from "./queue";
+export {
+  WorkQueue,
+  type JobRunner,
+  type QueueId,
+  type QueueJob,
+  type QueueSnapshot,
+} from "./queue";
 export {
   EngineQueues,
   QUEUE_PRIORITY,
@@ -32,7 +50,12 @@ export {
 export { CircularBuffer, type CircularBufferOptions } from "./circularBuffer";
 export { AutoRecovery, type RecoveryResult } from "./recovery";
 export { Watchdog, engineWatchdog } from "./watchdog";
-export { EngineRuntime, type EngineHealth, type EnginePorts, type EngineRuntimeOptions } from "./runtime";
+export {
+  EngineRuntime,
+  type EngineHealth,
+  type EnginePorts,
+  type EngineRuntimeOptions,
+} from "./runtime";
 export { createEnginePorts, listAudioDevices } from "./adapters";
 
 import { isDesktopRuntime } from "@/services/nativeClient";
