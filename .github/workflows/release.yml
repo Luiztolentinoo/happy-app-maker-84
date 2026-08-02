@@ -1,0 +1,125 @@
+name: release
+
+# Release nunca acontece em push comum: apenas tag versionada ou execução manual.
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: Canal de release
+        type: choice
+        options: [alpha, beta, stable]
+        default: alpha
+      publish:
+        description: Criar draft release no GitHub
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: validação
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: versões sincronizadas
+        run: bun run check:versions
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun run test
+      - run: bun run build
+      - name: auditoria de dependências
+        run: bun audit || echo "::warning::bun audit reportou avisos - revisar antes de publicar"
+
+  windows:
+    name: build Windows (NSIS + MSI)
+    needs: validate
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/desktop/src-tauri
+      - run: bun install --frozen-lockfile
+
+      - name: rustfmt
+        run: cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml -- --check
+      - name: clippy
+        run: cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml -- -D warnings
+      - name: cargo test
+        run: cargo test --manifest-path apps/desktop/src-tauri/Cargo.toml
+      - name: cargo audit
+        run: cargo install cargo-audit --locked && cargo audit --file apps/desktop/src-tauri/Cargo.lock || echo "::warning::cargo audit reportou avisos"
+
+      - name: sidecars FFmpeg/FFprobe (download + checksum)
+        env:
+          FFMPEG_URL: ${{ vars.FFMPEG_URL }}
+          FFMPEG_SHA256: ${{ vars.FFMPEG_SHA256 }}
+          FFPROBE_URL: ${{ vars.FFPROBE_URL }}
+          FFPROBE_SHA256: ${{ vars.FFPROBE_SHA256 }}
+        run: pwsh scripts/fetch-ffmpeg.ps1
+
+      - name: build Tauri (assina quando os secrets existirem)
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+          WINDOWS_TIMESTAMP_URL: ${{ secrets.WINDOWS_TIMESTAMP_URL }}
+        run: bun run desktop:build
+
+      - name: artefatos versionados + SHA-256
+        run: pwsh scripts/rename-artifacts.ps1 -OutDir dist/release
+
+      - name: manifesto do updater (somente com assinatura)
+        if: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY != '' }}
+        env:
+          CLIPCORE_UPDATE_BASE_URL: https://updates.clipcore.dev/windows-x86_64
+        run: node scripts/generate-update-manifest.mjs --out dist/release/latest.json --channel ${{ github.event.inputs.channel || 'alpha' }}
+
+      - name: SBOM
+        run: |
+          bun pm ls --all > dist/release/sbom-js.txt
+          cargo tree --manifest-path apps/desktop/src-tauri/Cargo.toml > dist/release/sbom-rust.txt
+          Copy-Item LICENSES.md dist/release/LICENSES.md
+        shell: pwsh
+
+      - name: aviso de artefato não assinado
+        if: ${{ secrets.WINDOWS_CERTIFICATE == '' }}
+        run: echo "::warning::Instaladores NAO assinados - nao publicar como estavel"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clipcore-windows-release
+          path: dist/release/**
+
+  draft-release:
+    name: draft release
+    needs: windows
+    if: ${{ github.event_name == 'push' || github.event.inputs.publish == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: clipcore-windows-release
+          path: dist/release
+      - name: criar draft (revisão manual obrigatória)
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          name: ClipCore ${{ github.ref_name }}
+          body_path: CHANGELOG.md
+          files: dist/release/**
+      # O manifesto do updater só é publicado no endpoint após aprovação manual
+      # do draft. Ver docs/UPDATER.md e docs/RELEASE_CHECKLIST.md.

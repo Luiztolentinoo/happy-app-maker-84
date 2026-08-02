@@ -8,6 +8,7 @@ import {
   Gamepad2,
   UploadCloud,
   Stethoscope,
+  DownloadCloud,
   Settings,
   UserRound,
   Radio,
@@ -38,6 +39,7 @@ const NAV: NavItem[] = [
   { to: "/games", label: "Jogos", icon: Gamepad2 },
   { to: "/uploads", label: "Uploads", icon: UploadCloud },
   { to: "/diagnostics", label: "Diagnóstico", icon: Stethoscope },
+  { to: "/updates", label: "Atualizações", icon: DownloadCloud },
   { to: "/settings", label: "Configurações", icon: Settings },
   { to: "/account", label: "Conta", icon: UserRound },
 ];

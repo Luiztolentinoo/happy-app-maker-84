@@ -1,0 +1,14 @@
+FFmpeg — aviso de licença
+
+O ClipCore distribui binários de FFmpeg e FFprobe compilados sob a
+GNU Lesser General Public License versão 2.1 ou posterior (LGPL-2.1-or-later).
+
+- Os binários são redistribuídos sem modificação.
+- Nenhum componente sob GPL é incluído: isso tornaria o ClipCore GPL.
+- O código-fonte correspondente está disponível em https://ffmpeg.org/download.html
+  e pode ser solicitado através do canal de suporte do ClipCore.
+- O texto completo da LGPL-2.1 acompanha esta instalação e está disponível em
+  https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+
+O ClipCore invoca o FFmpeg como processo separado (sidecar), com lista de
+argumentos separada, sem shell e sem vinculação estática.

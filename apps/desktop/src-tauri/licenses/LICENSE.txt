@@ -1,0 +1,10 @@
+ClipCore — Licença provisória
+
+Copyright (c) 2026 ClipCore
+
+Esta build é distribuída em canal Alpha para avaliação. O texto definitivo da
+licença do ClipCore será publicado antes do lançamento estável e passará por
+revisão jurídica.
+
+Este produto inclui software de terceiros. Consulte THIRD-PARTY.txt e
+FFMPEG-LICENSE.txt, também instalados junto ao aplicativo.

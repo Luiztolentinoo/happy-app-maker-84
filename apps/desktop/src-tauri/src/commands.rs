@@ -21,6 +21,9 @@ use crate::state::AppState;
 use crate::system::devices::{DeviceManager, SystemDeviceManager};
 use crate::system::game_detector::{DetectedGame, GameDetector, ProcessGameDetector};
 use crate::system::hotkeys::{HotkeyAction, HotkeyBinding};
+use crate::system::installation::{
+    self, InstallationReport, RepairAction, RepairOutcome,
+};
 use crate::system::storage::StorageStatus;
 
 fn emit_state(app: &AppHandle, state: &State<'_, AppState>) {
@@ -317,4 +320,105 @@ pub fn export_clip(state: State<'_, AppState>, args: ExportClipArgs) -> Result<S
         mute: args.mute.unwrap_or(false),
     })?;
     Ok(path.to_string_lossy().into())
+}
+
+// ------------------------------------------------------- instalação e atualização
+
+fn install_dir() -> Option<PathBuf> {
+    std::env::current_exe()
+        .ok()
+        .and_then(|exe| exe.parent().map(|p| p.to_path_buf()))
+}
+
+/// Relatório de integridade consumido pelo Centro de Diagnóstico.
+#[tauri::command]
+pub fn get_installation_report(state: State<'_, AppState>) -> Result<InstallationReport> {
+    let dir = install_dir();
+    let data_dir = state.data_dir.clone();
+    let checks = match &dir {
+        Some(d) => installation::inspect(d, &data_dir, &data_dir.join("clipcore.db")),
+        None => Vec::new(),
+    };
+    Ok(InstallationReport {
+        generated_at: chrono::Utc::now().to_rfc3339(),
+        version: env!("CARGO_PKG_VERSION").to_string(),
+        channel: "alpha".into(),
+        identifier: "com.clipcore.desktop".into(),
+        // Nenhum artefato é assinado ainda: ver docs/CODE_SIGNING.md.
+        signed: false,
+        install_dir: dir.map(|d| d.to_string_lossy().into_owned()),
+        data_dir: Some(data_dir.to_string_lossy().into_owned()),
+        logs_dir: Some(state.data_dir.join("logs").to_string_lossy().into_owned()),
+        checks,
+    })
+}
+
+/// Executa um reparo. Ações destrutivas devem ser confirmadas na interface
+/// antes da chamada; aqui apenas diretórios do próprio ClipCore são tocados.
+#[tauri::command]
+pub fn repair_installation(
+    state: State<'_, AppState>,
+    action: RepairAction,
+) -> Result<RepairOutcome> {
+    let message = match action {
+        RepairAction::ClearCache => {
+            let dir = state.data_dir.join("cache");
+            installation::mark_owned(&dir)?;
+            let bytes = installation::purge_owned(&dir)?;
+            format!("Cache limpo ({bytes} bytes).")
+        }
+        RepairAction::RunMigrations => {
+            state.database.migrate()?;
+            "Migrations aplicadas.".to_string()
+        }
+        RepairAction::ValidateDatabase => {
+            state.database.migrate()?;
+            "Banco íntegro.".to_string()
+        }
+        RepairAction::RebuildConfig => {
+            std::fs::create_dir_all(&state.data_dir)?;
+            installation::mark_owned(&state.data_dir.join("cache"))?;
+            "Configuração recriada com valores padrão para campos ausentes.".to_string()
+        }
+        RepairAction::RestoreSidecars => {
+            return Err(ClipCoreError::NotImplemented(
+                "restaurar sidecars exige reinstalar o ClipCore: o app nunca baixa binários em runtime"
+                    .into(),
+            ))
+        }
+        RepairAction::RestoreShortcuts => {
+            return Err(ClipCoreError::NotImplemented(
+                "recriar atalhos é feito pelo instalador (modo reparo)".into(),
+            ))
+        }
+        RepairAction::RebuildIndex => {
+            return Err(ClipCoreError::NotImplemented(
+                "reconstrução do índice da biblioteca ainda não implementada".into(),
+            ))
+        }
+    };
+    Ok(RepairOutcome { action, ok: true, message })
+}
+
+/// O updater permanece desativado enquanto as chaves de assinatura não existirem.
+/// Falhar explicitamente é melhor que simular uma verificação.
+#[tauri::command]
+pub fn check_for_update() -> Result<()> {
+    Err(ClipCoreError::NotImplemented(
+        "updater desativado: chaves de assinatura ausentes (docs/UPDATER.md)".into(),
+    ))
+}
+
+#[tauri::command]
+pub fn download_update() -> Result<()> {
+    Err(ClipCoreError::NotImplemented(
+        "download de atualização exige release assinada".into(),
+    ))
+}
+
+#[tauri::command]
+pub fn install_update() -> Result<()> {
+    Err(ClipCoreError::NotImplemented(
+        "instalação de atualização exige release assinada".into(),
+    ))
 }

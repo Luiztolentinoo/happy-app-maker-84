@@ -17,6 +17,7 @@ import { Route as GamesRouteImport } from './routes/games'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as RecordingsRouteImport } from './routes/recordings'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as UpdatesRouteImport } from './routes/updates'
 import { Route as UploadsRouteImport } from './routes/uploads'
 
 const IndexRoute = IndexRouteImport.update({
@@ -59,6 +60,11 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UpdatesRoute = UpdatesRouteImport.update({
+  id: '/updates',
+  path: '/updates',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UploadsRoute = UploadsRouteImport.update({
   id: '/uploads',
   path: '/uploads',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/library': typeof LibraryRoute
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
+  '/updates': typeof UpdatesRoute
   '/uploads': typeof UploadsRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +92,7 @@ export interface FileRoutesByTo {
   '/library': typeof LibraryRoute
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
+  '/updates': typeof UpdatesRoute
   '/uploads': typeof UploadsRoute
 }
 export interface FileRoutesById {
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/library': typeof LibraryRoute
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
+  '/updates': typeof UpdatesRoute
   '/uploads': typeof UploadsRoute
 }
 export interface FileRouteTypes {
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/recordings'
     | '/settings'
+    | '/updates'
     | '/uploads'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/recordings'
     | '/settings'
+    | '/updates'
     | '/uploads'
   id:
     | '__root__'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/library'
     | '/recordings'
     | '/settings'
+    | '/updates'
     | '/uploads'
   fileRoutesById: FileRoutesById
 }
@@ -144,6 +156,7 @@ export interface RootRouteChildren {
   LibraryRoute: typeof LibraryRoute
   RecordingsRoute: typeof RecordingsRoute
   SettingsRoute: typeof SettingsRoute
+  UpdatesRoute: typeof UpdatesRoute
   UploadsRoute: typeof UploadsRoute
 }
 
@@ -205,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/updates': {
+      id: '/updates'
+      path: '/updates'
+      fullPath: '/updates'
+      preLoaderRoute: typeof UpdatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/uploads': {
       id: '/uploads'
       path: '/uploads'
@@ -224,18 +244,9 @@ const rootRouteChildren: RootRouteChildren = {
   LibraryRoute: LibraryRoute,
   RecordingsRoute: RecordingsRoute,
   SettingsRoute: SettingsRoute,
+  UpdatesRoute: UpdatesRoute,
   UploadsRoute: UploadsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

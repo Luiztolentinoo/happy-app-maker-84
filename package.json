@@ -18,7 +18,8 @@
     "rust:fmt": "cargo fmt --manifest-path apps/desktop/src-tauri/Cargo.toml -- --check",
     "rust:clippy": "cargo clippy --manifest-path apps/desktop/src-tauri/Cargo.toml -- -D warnings",
     "typecheck": "tsgo --noEmit || tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "check:versions": "node scripts/check-versions.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
