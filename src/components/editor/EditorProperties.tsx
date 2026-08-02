@@ -52,7 +52,7 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
   return (
     <div className="space-y-5">
       <Panel level={2} className="space-y-4 p-5">
-        <SectionTitle icon={Scissors} title="Recorte" hint="Não destrutivo" />
+        <SectionTitle title="Recorte" hint="Não destrutivo" />
         <div className="grid grid-cols-2 gap-2">
           <Button
             size="sm"
@@ -88,7 +88,7 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
 
       {segment ? (
         <Panel level={2} className="space-y-4 p-5">
-          <SectionTitle icon={Gauge} title="Trecho selecionado" />
+          <SectionTitle title="Trecho selecionado" />
           <SliderField
             label="Velocidade"
             value={segment.speed}
@@ -119,7 +119,7 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
       ) : null}
 
       <Panel level={2} className="space-y-4 p-5">
-        <SectionTitle icon={Crop} title="Proporção" hint="Redes sociais" />
+        <SectionTitle title="Proporção" hint="Redes sociais" />
         <Segmented<AspectRatioPreset>
           label="Formato"
           value={timeline.crop.aspect}
@@ -154,7 +154,7 @@ export function EditorProperties({ editor }: { editor: UseEditorResult }) {
       </Panel>
 
       <Panel level={2} className="space-y-4 p-5">
-        <SectionTitle icon={Type} title="Textos" hint={`${timeline.overlays.length} ativo(s)`} />
+        <SectionTitle title="Textos" hint={`${timeline.overlays.length} ativo(s)`} />
         <Field label="Novo texto">
           <div className="flex gap-2">
             <TextInput
@@ -239,8 +239,8 @@ function ExportPanel({ editor }: { editor: UseEditorResult }) {
   const settings = project.exportSettings;
 
   return (
-    <Panel level={3} className="space-y-4 p-5">
-      <SectionTitle icon={Download} title="Exportar" hint={editor.runtime.label} />
+    <Panel level="strong" className="space-y-4 p-5">
+      <SectionTitle title="Exportar" hint={editor.runtime.label} />
       <Segmented<string>
         label="Preset"
         value={settings.presetId}
@@ -307,8 +307,8 @@ function ExportPanel({ editor }: { editor: UseEditorResult }) {
 }
 
 function JobRow({ job, onCancel }: { job: ExportJob; onCancel: (id: string) => Promise<void> }) {
-  const tone =
-    job.stage === "failed" ? "red" : job.stage === "completed" ? "green" : job.stage === "cancelled" ? "amber" : "purple";
+  const tone: "red" | "green" | "yellow" | "purple" =
+    job.stage === "failed" ? "red" : job.stage === "completed" ? "green" : job.stage === "cancelled" ? "yellow" : "purple";
   return (
     <div className="space-y-1.5 rounded-lg border border-border-primary p-3">
       <div className="flex items-center justify-between gap-2">
